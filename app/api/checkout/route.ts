@@ -1,5 +1,17 @@
+
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
+
+export async function POST() {
+  return NextResponse.json(
+    { error: "Paiement Stripe désactivé pour le moment" },
+    { status: 503 }
+  );
+}
+
+
+
+ {/*  import { NextResponse } from "next/server";
+ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -52,4 +64,4 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}
+}   */}

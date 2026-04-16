@@ -317,11 +317,11 @@ async function onPaiementWeroEffectue() {
             }}
           >
 
-       {/*   Stripe désactivé temporairement 
+      
            <button disabled>
          Paiement Stripe (bientôt disponible)
-          </button>   */}
-
+          </button>   
+ {/*   Stripe désactivé temporairement 
             <button
               type="button"
             onClick={allerVersStripe}
@@ -340,7 +340,7 @@ async function onPaiementWeroEffectue() {
               }}
             >
      {chargement ? "Redirection..." : "Payer avec Stripe"}   
-            </button>   
+            </button>    */}
 
             <button
               type="button"
