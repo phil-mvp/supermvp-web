@@ -55,7 +55,7 @@ export default async function AdminCommandesPage({
         <p>Aucune commande pour le moment.</p>
       ) : (
         <div style={{ display: "grid", gap: "20px" }}>
-          {commandes.map((commande) => {
+          {commandes.map((commande: any) => {
             let produits: ProduitCommande[] = [];
 
             try {
