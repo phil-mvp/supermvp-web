@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         },
         quantity: item.quantite ?? 1,
       })),
-      success_url:
+
        success_url: "https://supermvp-web.vercel.app/confirmation?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://supermvp-web.vercel.app/paiement",
       metadata: {
