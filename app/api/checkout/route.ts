@@ -35,8 +35,8 @@ export async function POST(request: Request) {
         quantity: item.quantite ?? 1,
       })),
       success_url:
-        "http://localhost:3000/confirmation?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:3000/paiement",
+       success_url: "https://supermvp-web.vercel.app/confirmation?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://supermvp-web.vercel.app/paiement",
       metadata: {
         client: JSON.stringify(client),
         panier: JSON.stringify(panier),
