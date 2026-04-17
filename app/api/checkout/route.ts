@@ -1,8 +1,8 @@
-
- import { NextResponse } from "next/server";
- import Stripe from "stripe";
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL as string;
 
 export async function POST(request: Request) {
   try {
@@ -15,6 +15,13 @@ export async function POST(request: Request) {
 
     if (!client) {
       return NextResponse.json({ error: "Client manquant" }, { status: 400 });
+    }
+
+    if (!baseUrl) {
+      return NextResponse.json(
+        { error: "NEXT_PUBLIC_SITE_URL manquante" },
+        { status: 500 }
+      );
     }
 
     const total = panier.reduce((sum: number, item: any) => {
@@ -34,9 +41,8 @@ export async function POST(request: Request) {
         },
         quantity: item.quantite ?? 1,
       })),
-
-       success_url: "https://supermvp-web.vercel.app/confirmation?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://supermvp-web.vercel.app/paiement",
+      success_url: `${baseUrl}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/paiement`,
       metadata: {
         client: JSON.stringify(client),
         panier: JSON.stringify(panier),
@@ -53,4 +59,4 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}   
+}
