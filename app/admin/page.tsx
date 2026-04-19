@@ -14,9 +14,9 @@ export default async function AdminPage() {
       <h1>Admin</h1>
       <p>Connexion réussie.</p>
 
-      <form action="/api/admin/logout" method="POST">
-        <button type="submit">Se déconnecter</button>
-      </form>
+      <form action="/api/admin/logout">
+  <button type="submit">Se déconnecter</button>
+</form>
     </div>
   );
 }
