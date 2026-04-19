@@ -34,7 +34,7 @@ export default function LoginAdminPage() {
       }
 
       // ✅ succès → redirection admin
-      router.push("/admin");
+     router.push("/admin/commandes");
     } catch (err) {
       setError("Erreur serveur");
       setLoading(false);
