@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function GET(request: Request) {
+async function clearSessionAndRedirect(request: Request) {
   const cookieStore = await cookies();
 
   cookieStore.set("admin_session", "", {
@@ -10,4 +10,12 @@ export async function GET(request: Request) {
   });
 
   return NextResponse.redirect(new URL("/admin/login", request.url));
+}
+
+export async function GET(request: Request) {
+  return clearSessionAndRedirect(request);
+}
+
+export async function POST(request: Request) {
+  return clearSessionAndRedirect(request);
 }
