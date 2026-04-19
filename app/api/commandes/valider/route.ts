@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { isAdminAuthenticated } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
+    // =====================
+    // PROTECTION ADMIN
+    // =====================
+    const isAuth = await isAdminAuthenticated();
+
+    if (!isAuth) {
+      return NextResponse.json(
+        { error: "Non autorisé" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const commandeId = Number(body.commandeId);
 
