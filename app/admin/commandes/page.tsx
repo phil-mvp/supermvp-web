@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ValiderButton from "./ValiderButton";
 import { cookies } from "next/headers";
+import LogoutButton from "./LogoutButton";
 
 export const dynamic = "force-dynamic";
 
@@ -22,17 +23,13 @@ function formatDate(date: Date) {
 // =====================
 // PAGE ADMIN COMMANDES
 // =====================
-export default async function AdminCommandesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ password?: string }>;
-}) {
+export default async function AdminCommandesPage() {
   const cookieStore = await cookies();
-const session = cookieStore.get("admin_session");
+  const session = cookieStore.get("admin_session");
 
-if (!session || session.value !== "connected") {
-  redirect("/admin/login");
-}
+  if (!session || session.value !== "connected") {
+    redirect("/admin/login");
+  }
 
   const commandes = await prisma.commande.findMany({
     orderBy: {
@@ -53,9 +50,9 @@ if (!session || session.value !== "connected") {
         Historique des commandes
       </h1>
 
-      <form action="/api/admin/logout" method="POST" style={{ marginBottom: "20px" }}>
-       <button type="submit">Se déconnecter</button>
-      </form>
+      <div style={{ marginBottom: "20px" }}>
+        <LogoutButton />
+      </div>
 
       {commandes.length === 0 ? (
         <p>Aucune commande pour le moment.</p>
@@ -93,9 +90,6 @@ if (!session || session.value !== "connected") {
                 <p><strong>Date :</strong> {formatDate(commande.createdAt)}</p>
                 <p><strong>Total :</strong> {commande.total.toFixed(2)} €</p>
 
-                {/* ===================== */}
-                {/* STATUT */}
-                {/* ===================== */}
                 <p>
                   <strong>Statut :</strong>{" "}
                   {commande.statut === "EN_ATTENTE"
@@ -103,9 +97,6 @@ if (!session || session.value !== "connected") {
                     : "✅ Validée"}
                 </p>
 
-                {/* ===================== */}
-                {/* PRODUITS */}
-                {/* ===================== */}
                 <div style={{ marginTop: "15px" }}>
                   <strong>Produits :</strong>
                   {produits.length === 0 ? (
@@ -122,9 +113,6 @@ if (!session || session.value !== "connected") {
                   )}
                 </div>
 
-                {/* ===================== */}
-                {/* BOUTON VALIDER */}
-                {/* ===================== */}
                 {commande.statut === "EN_ATTENTE" && (
                   <ValiderButton id={commande.id} />
                 )}
