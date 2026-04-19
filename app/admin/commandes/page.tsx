@@ -53,6 +53,10 @@ if (!session || session.value !== "connected") {
         Historique des commandes
       </h1>
 
+      <form action="/api/admin/logout" method="POST" style={{ marginBottom: "20px" }}>
+       <button type="submit">Se déconnecter</button>
+      </form>
+
       {commandes.length === 0 ? (
         <p>Aucune commande pour le moment.</p>
       ) : (
