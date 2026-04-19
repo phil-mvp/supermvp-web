@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ValiderButton from "./ValiderButton";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -26,11 +27,12 @@ export default async function AdminCommandesPage({
 }: {
   searchParams: Promise<{ password?: string }>;
 }) {
-  const { password } = await searchParams;
+  const cookieStore = await cookies();
+const session = cookieStore.get("admin_session");
 
-  if (password !== process.env.ADMIN_PASSWORD) {
-    redirect("/");
-  }
+if (!session || session.value !== "connected") {
+  redirect("/admin/login");
+}
 
   const commandes = await prisma.commande.findMany({
     orderBy: {
