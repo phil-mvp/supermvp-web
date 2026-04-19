@@ -30,8 +30,21 @@ export default function LogoutButton() {
   }
 
   return (
-    <button onClick={handleLogout} disabled={loading}>
-      {loading ? "Déconnexion..." : "Se déconnecter"}
-    </button>
+  <button
+  onClick={handleLogout}
+  disabled={loading}
+  style={{
+    padding: "10px 16px",
+    borderRadius: "8px",
+    border: "none",
+    backgroundColor: "#e53935",
+    color: "#fff",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "0.2s",
+  }}
+>
+  {loading ? "Déconnexion..." : "Se déconnecter"}
+</button>
   );
 }
