@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { envoyerEmailCommande } from "@/lib/email";
+
 
 export async function POST(request: Request) {
   try {
@@ -52,6 +54,12 @@ export async function POST(request: Request) {
         paiement: "WERO",
       },
     });
+
+    try {
+    await envoyerEmailCommande(commande);
+    } catch (error) {
+     console.error("Erreur email :", error);
+    }
 
     // =====================
     // RETOUR OK
