@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { envoyerEmailCommande } from "@/lib/email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
@@ -26,7 +27,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    if (event.type === "checkout.session.completed") {
+    if (
+      event.type === "checkout.session.completed" ||
+      event.type === "checkout.session.async_payment_succeeded"
+    ) {
       const session = event.data.object as Stripe.Checkout.Session;
 
       const clientRaw = session.metadata?.client;
@@ -53,7 +57,7 @@ export async function POST(request: Request) {
       });
 
       if (!dejaExiste) {
-        await prisma.commande.create({
+        const commande = await prisma.commande.create({
           data: {
             nom: client.nom,
             email: client.email,
@@ -83,6 +87,12 @@ export async function POST(request: Request) {
               },
             },
           });
+        }
+
+        try {
+          await envoyerEmailCommande(commande);
+        } catch (error) {
+          console.error("Erreur envoi email Stripe :", error);
         }
 
         revalidatePath("/produits");
