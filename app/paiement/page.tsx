@@ -412,7 +412,7 @@ async function onPaiementWeroEffectue() {
                 color: "#0f172a",
               }}
             >
-              06 XX XX XX XX
+              07 66 08 97 75
             </p>
 
             <p
