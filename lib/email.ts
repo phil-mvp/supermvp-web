@@ -36,7 +36,7 @@ export async function envoyerEmailCommande(commande: any) {
         <img
           src="https://supermvp-web.vercel.app/images/carte.png"
           alt="Samoussas Phils"
-          style="width:220px; max-width:100%; border-radius:12px; display:block; margin:0 auto;"
+          style="width:280px; max-width:100%; border-radius:12px; display:block; margin:0 auto;"
         />
       </div>
 
