@@ -29,6 +29,6 @@ model Commande {
   // 🔥 AJOUTS
   statut    String   @default("EN_ATTENTE")
   paiement  String   @default("WERO")
-
   createdAt DateTime @default(now())
+  stripeSessionId String? @unique
 }

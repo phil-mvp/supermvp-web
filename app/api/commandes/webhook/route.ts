@@ -48,12 +48,10 @@ export async function POST(request: Request) {
       const panier = JSON.parse(panierRaw);
       const total = Number(totalRaw);
 
-      const dejaExiste = await prisma.commande.findFirst({
-        where: {
-          email: client.email,
-          total,
-          produits: JSON.stringify(panier),
-        },
+     const dejaExiste = await prisma.commande.findFirst({
+     where: {
+      stripeSessionId: session.id,
+     },
       });
 
       if (!dejaExiste) {
@@ -67,6 +65,7 @@ export async function POST(request: Request) {
             produits: JSON.stringify(panier),
             statut: "VALIDEE",
             paiement: "STRIPE",
+            stripeSessionId: session.id,
           },
         });
 
