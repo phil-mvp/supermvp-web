@@ -19,7 +19,7 @@ export default function DeleteButton({ id }: Props) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${window.location.origin}/api/admin/commandes/delete`, {
+      const response = await fetch("/api/admin/commandes/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,20 @@ export default function DeleteButton({ id }: Props) {
         body: JSON.stringify({ id }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      const rawText = await response.text();
+
+      console.log("STATUS =", response.status);
+      console.log("CONTENT-TYPE =", contentType);
+      console.log("RAW RESPONSE =", rawText);
+
+      if (!contentType.includes("application/json")) {
+        throw new Error(
+          `Réponse non JSON reçue. Status ${response.status}.`
+        );
+      }
+
+      const data = JSON.parse(rawText);
 
       if (!response.ok) {
         throw new Error(data.error || "Erreur suppression");
@@ -36,7 +49,9 @@ export default function DeleteButton({ id }: Props) {
       window.location.reload();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Impossible de supprimer la commande.";
+        error instanceof Error
+          ? error.message
+          : "Impossible de supprimer la commande.";
       alert(message);
       console.error("Erreur suppression :", error);
       setLoading(false);

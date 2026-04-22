@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  return NextResponse.json({ ok: true, route: "delete api ready" });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
