@@ -14,7 +14,7 @@ const produits = [
     info: "Tous les produits origine: viande française et farine bio.",
   },
   {
-    nom: "Samoussas Fromage (comté, meule-fruitée, gruyère des Alpes)",
+    nom: "Samoussas Fromage (comté, meule-fruitée, tomme des Alpes)",
     image: "/images/fromage.jpg",
     modedecuisson:
       "👉Cuisson dans un bain d'huile impérativement. 🔥Thermostat <160°c> durée environ 3 mn.",
