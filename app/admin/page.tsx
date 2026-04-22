@@ -9,14 +9,6 @@ export default async function AdminPage() {
     redirect("/admin/login");
   }
 
-  return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>Admin</h1>
-      <p>Connexion réussie.</p>
-
-      <form action="/api/admin/logout">
-  <button type="submit">Se déconnecter</button>
-</form>
-    </div>
-  );
+  // 👉 redirection directe vers commandes
+  redirect("/admin/commandes");
 }

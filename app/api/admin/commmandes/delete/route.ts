@@ -4,17 +4,17 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id } = body;
+    const id = Number(body.id);
 
-    if (!id) {
+    if (!id || Number.isNaN(id)) {
       return NextResponse.json(
-        { error: "ID commande manquant" },
+        { error: "ID commande invalide" },
         { status: 400 }
       );
     }
 
     const commande = await prisma.commande.findUnique({
-      where: { id: Number(id) },
+      where: { id },
     });
 
     if (!commande) {
@@ -32,14 +32,15 @@ export async function POST(request: Request) {
     }
 
     await prisma.commande.delete({
-      where: { id: Number(id) },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Erreur suppression commande :", error);
+
     return NextResponse.json(
-      { error: "Erreur serveur" },
+      { error: "Erreur serveur lors de la suppression." },
       { status: 500 }
     );
   }

@@ -27,14 +27,18 @@ export default function DeleteButton({ id }: Props) {
         body: JSON.stringify({ id }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erreur suppression");
+        throw new Error(data.error || "Erreur suppression");
       }
 
       window.location.reload();
     } catch (error) {
-      alert("Impossible de supprimer la commande.");
-      console.error(error);
+      const message =
+        error instanceof Error ? error.message : "Impossible de supprimer la commande.";
+      alert(message);
+      console.error("Erreur suppression :", error);
       setLoading(false);
     }
   }
