@@ -19,7 +19,7 @@ export default function DeleteButton({ id }: Props) {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/commandes/delete", {
+      const response = await fetch(`${window.location.origin}/api/admin/commandes/delete`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
