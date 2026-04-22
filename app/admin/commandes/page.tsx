@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ValiderButton from "./ValiderButton";
+import DeleteButton from "./DeleteButton";
 import { cookies } from "next/headers";
 import LogoutButton from "./LogoutButton";
 
@@ -83,32 +84,18 @@ export default async function AdminCommandesPage() {
                   Commande #{commande.id}
                 </h2>
 
-                <p>
-                  <strong>Nom :</strong> {commande.nom}
-                </p>
-                <p>
-                  <strong>Email :</strong> {commande.email}
-                </p>
-                <p>
-                  <strong>Téléphone :</strong> {commande.telephone}
-                </p>
-                <p>
-                  <strong>Adresse :</strong> {commande.adresse}
-                </p>
-                <p>
-                  <strong>Date :</strong> {formatDate(commande.createdAt)}
-                </p>
-                <p>
-                  <strong>Total :</strong> {commande.total.toFixed(2)} €
-                </p>
+                <p><strong>Nom :</strong> {commande.nom}</p>
+                <p><strong>Email :</strong> {commande.email}</p>
+                <p><strong>Téléphone :</strong> {commande.telephone}</p>
+                <p><strong>Adresse :</strong> {commande.adresse}</p>
+                <p><strong>Date :</strong> {formatDate(commande.createdAt)}</p>
+                <p><strong>Total :</strong> {commande.total.toFixed(2)} €</p>
 
                 <p>
                   <strong>Paiement :</strong>{" "}
-                  {commande.paiement === "STRIPE" &&
-                  commande.statut === "VALIDEE"
+                  {commande.paiement === "STRIPE" && commande.statut === "VALIDEE"
                     ? "✅ Payé (Stripe)"
-                    : commande.paiement === "WERO" &&
-                      commande.statut === "VALIDEE"
+                    : commande.paiement === "WERO" && commande.statut === "VALIDEE"
                     ? "✅ Payé (Wero)"
                     : commande.statut === "EN_ATTENTE"
                     ? "⏳ En attente"
@@ -130,17 +117,24 @@ export default async function AdminCommandesPage() {
                     <ul style={{ marginTop: "8px" }}>
                       {produits.map((produit, index) => (
                         <li key={`${produit.id}-${index}`}>
-                          {produit.nom} — Quantité : {produit.quantite ?? 1} —
-                          Prix : {produit.prix.toFixed(2)} €
+                          {produit.nom} — Quantité : {produit.quantite ?? 1} — Prix :{" "}
+                          {produit.prix.toFixed(2)} €
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
 
-                {commande.statut === "EN_ATTENTE" && (
-                  <ValiderButton id={commande.id} />
-                )}
+                {/* === BOUTONS ACTION === */}
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "15px" }}>
+                  {commande.statut === "EN_ATTENTE" && (
+                    <ValiderButton id={commande.id} />
+                  )}
+
+                  {commande.statut === "VALIDEE" && (
+                    <DeleteButton id={commande.id} />
+                  )}
+                </div>
               </div>
             );
           })}
