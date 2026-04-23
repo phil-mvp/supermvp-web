@@ -29,8 +29,11 @@ export default function PaiementPage() {
     const panierStocke = localStorage.getItem("panier");
     const clientStocke = localStorage.getItem("client");
 
-    setPanier(panierStocke ? JSON.parse(panierStocke) : []);
-    setClient(clientStocke ? JSON.parse(clientStocke) : null);
+    const panierParse = panierStocke ? JSON.parse(panierStocke) : [];
+    const clientParse = clientStocke ? JSON.parse(clientStocke) : null;
+
+    setPanier(panierParse);
+    setClient(clientParse);
   }, []);
 
   const total = panier.reduce((sum, produit) => {
@@ -47,7 +50,9 @@ export default function PaiementPage() {
 
       const response = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ panier, client }),
       });
 
@@ -79,8 +84,14 @@ export default function PaiementPage() {
 
       const response = await fetch("/api/commandes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ client, panier, total }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          client,
+          panier,
+          total,
+        }),
       });
 
       const data = await response.json();
@@ -111,6 +122,7 @@ export default function PaiementPage() {
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden px-4 py-3 md:px-6 lg:px-8">
+      {/* IMAGE DE FOND */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/fondEcran.jpg"
@@ -119,7 +131,9 @@ export default function PaiementPage() {
         />
       </div>
 
+      {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-5xl">
+        {/* HEADER CORRIGÉ */}
         <section
           className="mt-3 mb-6 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-6 md:py-6"
           style={{
@@ -128,6 +142,7 @@ export default function PaiementPage() {
           }}
         >
           <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
+
             {/* LOGO MOBILE */}
             <div className="flex justify-center md:hidden">
               <img
@@ -146,6 +161,7 @@ export default function PaiementPage() {
               />
             </div>
 
+            {/* TEXTE */}
             <div className="text-center">
               <h1
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -167,11 +183,45 @@ export default function PaiementPage() {
                 className="w-[110px] lg:w-[120px] object-contain rounded-lg"
               />
             </div>
+
           </div>
         </section>
 
-        {/* Le reste de ton fichier ne change pas */}
+        {/* 👉 TOUT LE RESTE DE TON CODE NE CHANGE PAS */}
       </div>
+
+      {/* POPUP WERO (inchangée) */}
+      {showWero && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "20px" }}>
+          <div style={{ width: "100%", maxWidth: "460px", background: "white", borderRadius: "18px", padding: "24px", boxShadow: "0 20px 50px rgba(0,0,0,0.25)", textAlign: "center" }}>
+            <h2 style={{ margin: "0 0 10px 0", color: "#1d4ed8", fontSize: "24px" }}>
+              Paiement Wero
+            </h2>
+
+            <p style={{ margin: "0 0 8px 0", fontSize: "15px", color: "#374151" }}>
+              Envoyez <strong>{total.toFixed(2)} €</strong> au numéro :
+            </p>
+
+            <p style={{ margin: "0 0 14px 0", fontSize: "22px", fontWeight: "bold", color: "#0f172a" }}>
+              07 66 08 97 75
+            </p>
+
+            <p style={{ margin: "0 0 18px 0", fontSize: "14px", color: "#6b7280" }}>
+              Merci d’indiquer votre nom lors du paiement.
+            </p>
+
+            <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+              <button onClick={onPaiementWeroEffectue} style={{ padding: "11px 18px", background: "#16a34a", color: "white", borderRadius: "10px", border: "none", cursor: "pointer", fontWeight: "bold" }}>
+                Paiement effectué
+              </button>
+
+              <button onClick={onAnnulerWero} style={{ padding: "11px 18px", background: "#ef4444", color: "white", borderRadius: "10px", border: "none", cursor: "pointer", fontWeight: "bold" }}>
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
