@@ -70,54 +70,63 @@ export default function ProduitsClient({ produits }: Props) {
         />
       </div>
 
-     {/* CONTENU */}
-<div className="relative z-10 mx-auto w-full max-w-7xl">
-  {/* HEADER */}
-  <section
-    className="mt-3 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-3 md:py-3"
-    style={{
-      background:
-        "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
-    }}
-  >
-    <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-      {/* LOGO GAUCHE */}
-      <div className="flex justify-center md:justify-start">
-        <img
-          src="/images/Logosamoussas.png"
-          alt="Logo gauche"
-          className="w-[120px] md:w-[170px] lg:w-[100px] object-contain rounded-lg"
-        />
-      </div>
-
-      {/* CONTENU CENTRE */}
-      <div className="text-center">
-        <h1
-          style={{ fontFamily: "'Playfair Display', serif" }}
-          className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+      {/* CONTENU */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
+        {/* HEADER */}
+        <section
+          className="mt-3 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-3 md:py-3"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
+          }}
         >
-          Nos Samoussas
-        </h1>
+          <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
+            {/* LOGO MOBILE */}
+            <div className="flex justify-center md:hidden">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo"
+                className="w-[110px] object-contain rounded-lg"
+              />
+            </div>
 
-        <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
-          Croustillants, savoureux et faits maison
-        </p>
+            {/* LOGO GAUCHE DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-start">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo gauche"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
 
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#4b2e05] md:text-base">
-          Idéal à l’apéro ou avec une salade.
-        </p>
-      </div>
+            {/* CONTENU CENTRE */}
+            <div className="text-center">
+              <h1
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+              >
+                Nos Samoussas
+              </h1>
 
-      {/* LOGO DROIT */}
-      <div className="flex justify-center md:justify-end">
-        <img
-          src="/images/Logosamoussas.png"
-          alt="Logo droit"
-          className="w-[120px] md:w-[170px] lg:w-[100px] object-contain rounded-lg"
-        />
-      </div>
-    </div>
-  </section>
+              <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
+                Croustillants, savoureux et faits maison
+              </p>
+
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#4b2e05] md:text-base">
+                Idéal à l’apéro ou avec une salade.
+              </p>
+            </div>
+
+            {/* LOGO DROIT DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-end">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo droit"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
+          </div>
+        </section>
 
         {/* MESSAGE */}
         {message && (
@@ -155,7 +164,6 @@ export default function ProduitsClient({ produits }: Props) {
         >
           👉 Cliquez sur <strong>"Ajouter"</strong> pour sélectionner vos produits.
           Vous pourrez ensuite modifier les quantités dans votre panier 🧺
-
         </div>
 
         {/* PRODUITS */}
@@ -178,11 +186,13 @@ export default function ProduitsClient({ produits }: Props) {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.03)";
-                e.currentTarget.style.boxShadow = "0 12px 28px rgba(0,0,0,0.18)";
+                e.currentTarget.style.boxShadow =
+                  "0 12px 28px rgba(0,0,0,0.18)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(0,0,0,0.08)";
               }}
             >
               <img
@@ -206,7 +216,13 @@ export default function ProduitsClient({ produits }: Props) {
                   {produit.nom}
                 </h2>
 
-                <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#555" }}>
+                <p
+                  style={{
+                    margin: "0 0 12px 0",
+                    fontSize: "14px",
+                    color: "#555",
+                  }}
+                >
                   {produit.nom.toLowerCase().includes("boeuf") &&
                     "Samoussas au bœuf croustillants."}
                   {produit.nom.toLowerCase().includes("fromage") &&
@@ -225,7 +241,12 @@ export default function ProduitsClient({ produits }: Props) {
 
                 <button
                   onClick={() =>
-                    ajouterAuPanier(produit.id, produit.nom, produit.prix, produit.stock)
+                    ajouterAuPanier(
+                      produit.id,
+                      produit.nom,
+                      produit.prix,
+                      produit.stock
+                    )
                   }
                   disabled={produit.stock === 0}
                   style={{
@@ -250,12 +271,14 @@ export default function ProduitsClient({ produits }: Props) {
                   onMouseEnter={(e) => {
                     if (produit.stock !== 0) {
                       e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow = "0 6px 14px rgba(37,99,235,0.5)";
+                      e.currentTarget.style.boxShadow =
+                        "0 6px 14px rgba(37,99,235,0.5)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "0 4px 10px rgba(37,99,235,0.4)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 10px rgba(37,99,235,0.4)";
                   }}
                 >
                   🛒 Ajouter
