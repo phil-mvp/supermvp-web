@@ -54,72 +54,78 @@ export default function HomePage() {
       {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         {/* HERO PRO */}
-       
-       <section
-  className="mt-3 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-6 md:py-6"
-  style={{
-    background:
-      "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
-  }}
->
-  <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-    
-    {/* LOGO GAUCHE */}
-    <div className="flex justify-center md:justify-start">
-      <img
-        src="/images/Logosamoussas.png"
-        alt="Logo gauche"
-        className="w-[120px] md:w-[170px] lg:w-[210px] object-contain rounded-lg"
-      />
-    </div>
+        <section
+          className="mt-3 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-6 md:py-6"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
+          }}
+        >
+          <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
+            {/* LOGO MOBILE */}
+            <div className="flex justify-center md:hidden">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo"
+                className="w-[110px] object-contain rounded-lg"
+              />
+            </div>
 
-    {/* CONTENU CENTRE */}
-    <div className="text-center">
-      <h1
-        style={{ fontFamily: "'Playfair Display', serif" }}
-        className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
-      >
-        Samoussas Prestige
-      </h1>
+            {/* LOGO GAUCHE DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-start">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo gauche"
+                className="w-[150px] lg:w-[190px] object-contain rounded-lg"
+              />
+            </div>
 
-      <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
-        Le goût qui fait la différence
-      </p>
+            {/* CONTENU CENTRE */}
+            <div className="text-center">
+              <h1
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+              >
+                Samoussas Prestige
+              </h1>
 
-      <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#4b2e05] md:text-base">
-        Des Samoussas Croustillants, Généreux et Savoureux.
-        A déguster pour vos apéritifs, repas et moments gourmands.
-      </p>
+              <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
+                Le goût qui fait la différence
+              </p>
 
-      <div className="mt-4">
-        <Link href="/produits">
-          <button
-            className="cursor-pointer rounded-xl px-6 py-2.5 text-base font-bold text-white transition hover:scale-[1.02]"
-            style={{
-              background: "linear-gradient(135deg, #16a34a, #15803d)",
-              boxShadow: "0 8px 20px rgba(22,163,74,0.30)",
-            }}
-          >
-            Voir en boutique
-          </button>
-        </Link>
-      </div>
-    </div>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#4b2e05] md:text-base">
+                Des Samoussas Croustillants, Généreux et Savoureux.
+                A déguster pour vos apéritifs, repas et moments gourmands.
+              </p>
 
-    {/* LOGO DROIT */}
-    <div className="flex justify-center md:justify-end">
-      <img
-        src="/images/Logosamoussas.png"
-        alt="Logo droit"
-        className="w-[120px] md:w-[170px] lg:w-[210px] object-contain rounded-lg"
-      />
-    </div>
+              <div className="mt-4">
+                <Link href="/produits">
+                  <button
+                    className="cursor-pointer rounded-xl px-6 py-2.5 text-base font-bold text-white transition hover:scale-[1.02]"
+                    style={{
+                      background: "linear-gradient(135deg, #16a34a, #15803d)",
+                      boxShadow: "0 8px 20px rgba(22,163,74,0.30)",
+                    }}
+                  >
+                    Voir en boutique
+                  </button>
+                </Link>
+              </div>
+            </div>
 
-  </div>
-</section>
+            {/* LOGO DROIT DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-end">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo droit"
+                className="w-[150px] lg:w-[190px] object-contain rounded-lg"
+              />
+            </div>
+          </div>
+        </section>
 
         {/* INTRO */}
-        <section className="mt-3 rounded-[18px] bg-white/90 px-2 py-1 text-center shadow-md">
+        <section className="mt-3 rounded-[18px] bg-white/90 px-3 py-2 text-center shadow-md">
           <h2 className="text-xl font-bold text-[#3a2a10] md:text-2xl">
             Nos spécialités
           </h2>
