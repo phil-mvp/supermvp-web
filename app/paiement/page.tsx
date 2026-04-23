@@ -133,7 +133,7 @@ export default function PaiementPage() {
 
       {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-5xl">
-        {/* HEADER CORRIGÉ */}
+        {/* HEADER PREMIUM */}
         <section
           className="mt-3 mb-6 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-6 md:py-6"
           style={{
@@ -142,7 +142,6 @@ export default function PaiementPage() {
           }}
         >
           <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-
             {/* LOGO MOBILE */}
             <div className="flex justify-center md:hidden">
               <img
@@ -161,7 +160,6 @@ export default function PaiementPage() {
               />
             </div>
 
-            {/* TEXTE */}
             <div className="text-center">
               <h1
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -183,39 +181,291 @@ export default function PaiementPage() {
                 className="w-[110px] lg:w-[120px] object-contain rounded-lg"
               />
             </div>
-
           </div>
         </section>
 
-        {/* 👉 TOUT LE RESTE DE TON CODE NE CHANGE PAS */}
+        <div className="grid gap-4 lg:grid-cols-[1fr_1.05fr]">
+          {/* CLIENT */}
+          <section
+            style={{
+              backgroundColor: "rgba(255,255,255,0.92)",
+              borderRadius: "16px",
+              padding: "14px",
+              boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+            }}
+          >
+            <h2
+              style={{
+                margin: "0 0 10px 0",
+                fontSize: "21px",
+                color: "#3a2a10",
+              }}
+            >
+              Client
+            </h2>
+
+            {client ? (
+              <div style={{ display: "grid", gap: "7px", fontSize: "15px" }}>
+                <p style={{ margin: 0 }}>
+                  <strong>Nom :</strong> {client.nom}
+                </p>
+                <p style={{ margin: 0 }}>
+                  <strong>Email :</strong> {client.email}
+                </p>
+                <p style={{ margin: 0 }}>
+                  <strong>Téléphone :</strong> {client.telephone}
+                </p>
+                <p style={{ margin: 0 }}>
+                  <strong>Adresse :</strong> {client.adresse}
+                </p>
+              </div>
+            ) : (
+              <p style={{ margin: 0 }}>Aucune information client.</p>
+            )}
+          </section>
+
+          {/* PANIER */}
+          <section
+            style={{
+              backgroundColor: "rgba(255,255,255,0.92)",
+              borderRadius: "16px",
+              padding: "14px",
+              boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+            }}
+          >
+            <h2
+              style={{
+                margin: "0 0 10px 0",
+                fontSize: "21px",
+                color: "#3a2a10",
+              }}
+            >
+              Panier
+            </h2>
+
+            {panier.length === 0 ? (
+              <p style={{ margin: 0 }}>Panier vide.</p>
+            ) : (
+              <div style={{ display: "grid", gap: "10px" }}>
+                {panier.map((produit, index) => {
+                  const quantite = produit.quantite ?? 1;
+                  const sousTotal = produit.prix * quantite;
+
+                  return (
+                    <div
+                      key={`${produit.id}-${index}`}
+                      style={{
+                        border: "1px solid #ead7a4",
+                        borderRadius: "10px",
+                        padding: "10px 12px",
+                        background: "linear-gradient(135deg, #fffdf8, #fff7ed)",
+                      }}
+                    >
+                      <p
+                        style={{
+                          margin: 0,
+                          fontWeight: "bold",
+                          fontSize: "16px",
+                          color: "#4b2e05",
+                        }}
+                      >
+                        {produit.nom}
+                      </p>
+
+                      <p style={{ margin: "5px 0 0 0", fontSize: "14px" }}>
+                        Prix : {produit.prix.toFixed(2)} € — Quantité :{" "}
+                        {quantite}
+                      </p>
+
+                      <p
+                        style={{
+                          margin: "5px 0 0 0",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Sous-total : {sousTotal.toFixed(2)} €
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* TOTAL + BOUTONS */}
+        <div
+          style={{
+            marginTop: "14px",
+            background: "linear-gradient(135deg, #fff7ed, #ffffff)",
+            borderRadius: "16px",
+            padding: "18px 14px",
+            textAlign: "center",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+            border: "1px solid #fde68a",
+          }}
+        >
+          <h2
+            style={{
+              margin: "0 0 14px 0",
+              fontSize: "26px",
+              color: "#3a2a10",
+            }}
+          >
+            Total : {total.toFixed(2)} €
+          </h2>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "12px",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              type="button"
+              onClick={allerVersStripe}
+              disabled={chargement}
+              style={{
+                padding: "11px 22px",
+                fontSize: "16px",
+                background: "linear-gradient(135deg, #16a34a, #15803d)",
+                color: "white",
+                border: "none",
+                borderRadius: "12px",
+                cursor: chargement ? "not-allowed" : "pointer",
+                opacity: chargement ? 0.7 : 1,
+                fontWeight: "bold",
+                boxShadow: "0 6px 14px rgba(22,163,74,0.4)",
+              }}
+            >
+              {chargement ? "Redirection..." : "Payer avec Stripe"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowWero(true)}
+              style={{
+                padding: "11px 22px",
+                fontSize: "16px",
+                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                color: "white",
+                border: "none",
+                borderRadius: "12px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                boxShadow: "0 6px 14px rgba(37,99,235,0.35)",
+              }}
+            >
+              Payer avec Wero
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* POPUP WERO (inchangée) */}
+      {/* POPUP WERO CENTRÉE */}
       {showWero && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "20px" }}>
-          <div style={{ width: "100%", maxWidth: "460px", background: "white", borderRadius: "18px", padding: "24px", boxShadow: "0 20px 50px rgba(0,0,0,0.25)", textAlign: "center" }}>
-            <h2 style={{ margin: "0 0 10px 0", color: "#1d4ed8", fontSize: "24px" }}>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.45)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 50,
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "460px",
+              background: "white",
+              borderRadius: "18px",
+              padding: "24px",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
+              textAlign: "center",
+            }}
+          >
+            <h2
+              style={{
+                margin: "0 0 10px 0",
+                color: "#1d4ed8",
+                fontSize: "24px",
+              }}
+            >
               Paiement Wero
             </h2>
 
-            <p style={{ margin: "0 0 8px 0", fontSize: "15px", color: "#374151" }}>
+            <p
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "15px",
+                color: "#374151",
+              }}
+            >
               Envoyez <strong>{total.toFixed(2)} €</strong> au numéro :
             </p>
 
-            <p style={{ margin: "0 0 14px 0", fontSize: "22px", fontWeight: "bold", color: "#0f172a" }}>
+            <p
+              style={{
+                margin: "0 0 14px 0",
+                fontSize: "22px",
+                fontWeight: "bold",
+                color: "#0f172a",
+              }}
+            >
               07 66 08 97 75
             </p>
 
-            <p style={{ margin: "0 0 18px 0", fontSize: "14px", color: "#6b7280" }}>
+            <p
+              style={{
+                margin: "0 0 18px 0",
+                fontSize: "14px",
+                color: "#6b7280",
+              }}
+            >
               Merci d’indiquer votre nom lors du paiement.
             </p>
 
-            <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
-              <button onClick={onPaiementWeroEffectue} style={{ padding: "11px 18px", background: "#16a34a", color: "white", borderRadius: "10px", border: "none", cursor: "pointer", fontWeight: "bold" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "12px",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                onClick={onPaiementWeroEffectue}
+                style={{
+                  padding: "11px 18px",
+                  background: "#16a34a",
+                  color: "white",
+                  borderRadius: "10px",
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
                 Paiement effectué
               </button>
 
-              <button onClick={onAnnulerWero} style={{ padding: "11px 18px", background: "#ef4444", color: "white", borderRadius: "10px", border: "none", cursor: "pointer", fontWeight: "bold" }}>
+              <button
+                onClick={onAnnulerWero}
+                style={{
+                  padding: "11px 18px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "10px",
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
                 Annuler
               </button>
             </div>
