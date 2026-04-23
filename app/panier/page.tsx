@@ -76,51 +76,58 @@ export default function PanierPage() {
         />
       </div>
 
-    {/* CONTENU */}
-<div className="relative z-10 mx-auto w-full max-w-5xl">
-  <section
-    className="mt-3 mb-6 rounded-[24px] px-5 py-6 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-4 md:py-4"
-    style={{
-      background:
-        "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
-    }}
-  >
-    <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-      
-      {/* LOGO GAUCHE */}
-      <div className="flex justify-center md:justify-start">
-        <img
-          src="/images/Logosamoussas.png"
-          alt="Logo gauche"
-          className="w-[120px] md:w-[170px] lg:w-[100px] object-contain rounded-lg"
-        />
-      </div>
-
-      {/* CONTENU CENTRE */}
-      <div className="text-center">
-        <h1
-          style={{ fontFamily: "'Playfair Display', serif" }}
-          className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+      {/* CONTENU */}
+      <div className="relative z-10 mx-auto w-full max-w-5xl">
+        <section
+          className="mt-3 mb-6 rounded-[24px] px-5 py-6 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-4 md:py-4"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
+          }}
         >
-          Mon Panier
-        </h1>
+          <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
+            {/* LOGO MOBILE */}
+            <div className="flex justify-center md:hidden">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo"
+                className="w-[110px] object-contain rounded-lg"
+              />
+            </div>
 
-        <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
-          Vérifiez vos produits avant de passer commande
-        </p>
-      </div>
+            {/* LOGO GAUCHE DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-start">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo gauche"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
 
-      {/* LOGO DROIT */}
-      <div className="flex justify-center md:justify-end">
-        <img
-          src="/images/Logosamoussas.png"
-          alt="Logo droit"
-          className="w-[120px] md:w-[170px] lg:w-[100px] object-contain rounded-lg"
-        />
-      </div>
+            {/* CONTENU CENTRE */}
+            <div className="text-center">
+              <h1
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+              >
+                Mon Panier
+              </h1>
 
-    </div>
-  </section>
+              <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
+                Vérifiez vos produits avant de passer commande
+              </p>
+            </div>
+
+            {/* LOGO DROIT DESKTOP */}
+            <div className="hidden md:flex justify-center md:justify-end">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo droit"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
+          </div>
+        </section>
 
         {panier.length === 0 ? (
           <div
@@ -155,13 +162,7 @@ export default function PanierPage() {
           </div>
         ) : (
           <>
-            <div
-              style={{
-                display: "grid",
-                gap: "14px",
-                marginBottom: "18px",
-              }}
-            >
+            <div style={{ display: "grid", gap: "14px", marginBottom: "18px" }}>
               {panier.map((produit) => (
                 <div
                   key={produit.id}
@@ -176,7 +177,6 @@ export default function PanierPage() {
                     boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
                   }}
                 >
-                  {/* IMAGE */}
                   <img
                     src={`/images/${
                       produit.nom.toLowerCase().includes("boeuf")
@@ -195,39 +195,20 @@ export default function PanierPage() {
                     }}
                   />
 
-                  {/* INFOS */}
                   <div style={{ flex: 1 }}>
-                    <h2
-                      style={{
-                        margin: "0 0 6px 0",
-                        fontSize: "17px",
-                      }}
-                    >
+                    <h2 style={{ margin: "0 0 6px 0", fontSize: "17px" }}>
                       {produit.nom}
                     </h2>
 
-                    <p
-                      style={{
-                        margin: "0 0 4px 0",
-                        color: "#555",
-                        fontSize: "15px",
-                      }}
-                    >
+                    <p style={{ margin: "0 0 4px 0", color: "#555", fontSize: "15px" }}>
                       {produit.prix.toFixed(2)} € x {produit.quantite}
                     </p>
 
-                    <p
-                      style={{
-                        margin: 0,
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                      }}
-                    >
+                    <p style={{ margin: 0, fontWeight: "bold", fontSize: "15px" }}>
                       {(produit.prix * produit.quantite).toFixed(2)} €
                     </p>
                   </div>
 
-                  {/* ACTIONS */}
                   <div
                     style={{
                       display: "flex",
@@ -236,19 +217,7 @@ export default function PanierPage() {
                       flexShrink: 0,
                     }}
                   >
-                    <button
-                      onClick={() => diminuerQuantite(produit.id)}
-                      style={{
-                        width: "34px",
-                        height: "34px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#e5e7eb",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                      }}
-                    >
+                    <button onClick={() => diminuerQuantite(produit.id)} style={btnQty}>
                       −
                     </button>
 
@@ -256,19 +225,7 @@ export default function PanierPage() {
                       {produit.quantite}
                     </span>
 
-                    <button
-                      onClick={() => augmenterQuantite(produit.id)}
-                      style={{
-                        width: "34px",
-                        height: "34px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#dbeafe",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                      }}
-                    >
+                    <button onClick={() => augmenterQuantite(produit.id)} style={btnQtyBlue}>
                       +
                     </button>
 
@@ -304,14 +261,7 @@ export default function PanierPage() {
                 Total : {total.toFixed(2)} €
               </h2>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "12px",
-                  flexWrap: "wrap",
-                }}
-              >
+              <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
                 <Link href="/commande">
                   <button
                     style={{
@@ -353,3 +303,19 @@ export default function PanierPage() {
     </main>
   );
 }
+
+const btnQty = {
+  width: "34px",
+  height: "34px",
+  borderRadius: "8px",
+  border: "none",
+  backgroundColor: "#e5e7eb",
+  cursor: "pointer",
+  fontSize: "18px",
+  fontWeight: "bold",
+};
+
+const btnQtyBlue = {
+  ...btnQty,
+  backgroundColor: "#dbeafe",
+};
