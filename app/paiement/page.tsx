@@ -196,52 +196,64 @@ export default function PaiementPage() {
                 borderRadius: "8px",
               }}
             >
-              {weroLoading ? "Enregistrement..." : "Paiement effectué"}
-            </button>
-          </div>
-        </div>
-      )}
+              {/* CONFIRMATION */}
+{confirmationMessage && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      backgroundColor: "rgba(0,0,0,0.55)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 99999,
+      padding: "20px",
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        opacity: 1,
+        padding: "24px",
+        borderRadius: "16px",
+        textAlign: "center",
+        maxWidth: "430px",
+        width: "100%",
+      }}
+    >
+      <p
+        style={{
+          color: "#111827",
+          WebkitTextFillColor: "#111827",
+          fontSize: "17px",
+          fontWeight: "bold",
+          lineHeight: "1.5",
+          margin: "0 0 18px 0",
+          opacity: 1,
+        }}
+      >
+        {confirmationMessage}
+      </p>
 
-      {/* CONFIRMATION */}
-      {confirmationMessage && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.55)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 99999,
-          }}
-        >
-          <div
-            style={{
-              background: "#ffffff",
-              opacity: 1,
-              color: "#111827",
-              padding: "24px",
-              borderRadius: "16px",
-              textAlign: "center",
-            }}
-          >
-            <p>{confirmationMessage}</p>
-
-            <button
-              onClick={fermerConfirmation}
-              style={{
-                marginTop: "10px",
-                background: "#2563eb",
-                color: "white",
-                padding: "10px",
-                borderRadius: "8px",
-              }}
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
+      <button
+        onClick={fermerConfirmation}
+        style={{
+          marginTop: "10px",
+          backgroundColor: "#2563eb",
+          color: "#ffffff",
+          WebkitTextFillColor: "#ffffff",
+          padding: "11px 22px",
+          borderRadius: "10px",
+          border: "none",
+          fontWeight: "bold",
+          fontSize: "16px",
+        }}
+      >
+        Fermer
+      </button>
+    </div>
+  </div>
+)}
     </main>
   );
 } 
