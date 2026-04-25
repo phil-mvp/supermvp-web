@@ -22,12 +22,22 @@ type Props = {
   produits: Produit[];
 };
 
+type Toast = {
+  message: string;
+  type: "success" | "error";
+};
+
 export default function ProduitsClient({ produits }: Props) {
-  const [message, setMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<Toast | null>(null);
+
+  function afficherToast(message: string, type: "success" | "error" = "success") {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 2200);
+  }
 
   function ajouterAuPanier(id: number, nom: string, prix: number, stock: number) {
     if (stock === 0) {
-      alert("Rupture de stock");
+      afficherToast("Rupture de stock", "error");
       return;
     }
 
@@ -37,7 +47,7 @@ export default function ProduitsClient({ produits }: Props) {
 
     if (indexProduit >= 0) {
       if (panier[indexProduit].quantite >= stock) {
-        alert("Stock maximum atteint");
+        afficherToast("Stock maximum atteint", "error");
         return;
       }
 
@@ -54,13 +64,37 @@ export default function ProduitsClient({ produits }: Props) {
     }
 
     localStorage.setItem("panier", JSON.stringify(panier));
-
-    setMessage(`${nom} ajouté au panier`);
-    setTimeout(() => setMessage(null), 1800);
+    afficherToast(`${nom} ajouté au panier`, "success");
   }
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden px-3 py-2 md:px-6 lg:px-8">
+      {/* TOAST GLOBAL */}
+      {toast && (
+        <div
+          style={{
+            position: "fixed",
+            top: "18px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 99999,
+            width: "calc(100% - 32px)",
+            maxWidth: "420px",
+            backgroundColor: toast.type === "success" ? "#dcfce7" : "#fee2e2",
+            color: toast.type === "success" ? "#166534" : "#991b1b",
+            padding: "13px 16px",
+            borderRadius: "14px",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "14px",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+          }}
+        >
+          {toast.type === "success" ? "✅ " : "⚠️ "}
+          {toast.message}
+        </div>
+      )}
+
       {/* IMAGE DE FOND */}
       <div className="absolute inset-0 z-0">
         <img
@@ -127,26 +161,6 @@ export default function ProduitsClient({ produits }: Props) {
             </div>
           </div>
         </section>
-
-        {/* MESSAGE */}
-        {message && (
-          <div
-            style={{
-              maxWidth: "420px",
-              margin: "10px auto 14px auto",
-              backgroundColor: "#dcfce7",
-              color: "#166534",
-              padding: "11px",
-              borderRadius: "10px",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: "14px",
-              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            ✅ {message}
-          </div>
-        )}
 
         {/* INFO */}
         <div
@@ -267,18 +281,6 @@ export default function ProduitsClient({ produits }: Props) {
                         ? "none"
                         : "0 4px 10px rgba(37,99,235,0.4)",
                     transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (produit.stock !== 0) {
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 14px rgba(37,99,235,0.5)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow =
-                      "0 4px 10px rgba(37,99,235,0.4)";
                   }}
                 >
                   🛒 Ajouter
