@@ -196,15 +196,30 @@ export default function PanierPage() {
                   />
 
                   <div style={{ flex: 1 }}>
-                    <h2 style={{ margin: "0 0 6px 0", fontSize: "17px" }}>
-                      {produit.nom}
+
+                    <h2
+                     style={{
+                      margin: "0 0 6px 0",
+                       fontSize: "17px",
+                       color: "#111827",
+                      fontWeight: "bold",
+                     }}
+                      >
+                       {produit.nom}
                     </h2>
 
-                    <p style={{ margin: "0 0 4px 0", color: "#555", fontSize: "15px" }}>
+                    <p style={{ margin: "0 0 4px 0", color: "#374151", fontSize: "15px" }}>
                       {produit.prix.toFixed(2)} € x {produit.quantite}
                     </p>
 
-                    <p style={{ margin: 0, fontWeight: "bold", fontSize: "15px" }}>
+                    <p
+                     style={{
+                      margin: 0,
+                      fontWeight: "bold",
+                      fontSize: "15px",
+                       color: "#111827",
+                        }}
+                        >
                       {(produit.prix * produit.quantite).toFixed(2)} €
                     </p>
                   </div>
@@ -257,7 +272,7 @@ export default function PanierPage() {
                 border: "1px solid #fde68a",
               }}
             >
-              <h2 style={{ marginBottom: "18px", fontSize: "26px" }}>
+              <h2 style={{ marginBottom: "18px", color: "#111827", fontSize: "26px" }}>
                 Total : {total.toFixed(2)} €
               </h2>
 

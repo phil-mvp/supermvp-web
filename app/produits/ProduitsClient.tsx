@@ -226,9 +226,17 @@ export default function ProduitsClient({ produits }: Props) {
               />
 
               <div style={{ padding: "16px" }}>
-                <h2 style={{ margin: "0 0 8px 0", fontSize: "20px" }}>
-                  {produit.nom}
-                </h2>
+
+               <h2
+                style={{
+                 margin: "0 0 8px 0",
+                  fontSize: "20px",
+                 color: "#111827",
+                fontWeight: "bold",
+                 }}
+                >
+              {produit.nom}
+            </h2>
 
                 <p
                   style={{
@@ -245,14 +253,14 @@ export default function ProduitsClient({ produits }: Props) {
                     "Poulet tendre et épicé."}
                 </p>
 
-                <p style={{ margin: "0 0 8px 0", fontSize: "15px" }}>
-                  Prix : {produit.prix.toFixed(2)} €
+               <p style={{ margin: "0 0 8px 0", fontSize: "15px", color: "#111827" }}>
+                   Prix : {produit.prix.toFixed(2)} €
                 </p>
 
-                <p style={{ margin: "0 0 14px 0", fontSize: "15px" }}>
-                  {produit.stock === 0 ? "Rupture de stock" : "En stock"}
-                </p>
-
+               <p style={{ margin: "0 0 14px 0", fontSize: "15px", color: "#111827" }}>
+                 {produit.stock === 0 ? "Rupture de stock" : "En stock"}
+                  </p>
+                  
                 <button
                   onClick={() =>
                     ajouterAuPanier(
