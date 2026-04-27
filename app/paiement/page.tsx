@@ -1,4 +1,4 @@
-POur correction . Avec le fichier complet stp //
+
 "use client";
 
 import { useEffect, useState } from "react";
