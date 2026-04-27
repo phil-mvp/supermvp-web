@@ -143,13 +143,13 @@ export default function CommandePage() {
                     Étape suivante : paiement
                   </p>
 
-                  <button
-                    type="button"
-                    onClick={continuerVersPaiement}
-                    className="rounded-xl bg-[#cfa653] px-6 py-3 font-semibold text-white"
+                 <button
+                 type="button"
+                 onClick={continuerVersPaiement}
+                 className="cursor-pointer rounded-xl bg-[#cfa653] px-6 py-3 font-semibold text-white hover:bg-[#b8933f]"
                   >
-                    Continuer
-                  </button>
+                  Continuer
+                </button>
                 </div>
 
               </form>

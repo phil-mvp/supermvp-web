@@ -244,7 +244,7 @@ export default function PaiementPage() {
               type="button"
               onClick={allerVersStripe}
               disabled={chargement}
-              className="rounded-xl bg-green-600 px-6 py-3 font-bold text-white disabled:opacity-70"
+              className="cursor-pointer rounded-xl bg-green-600 px-6 py-3 font-bold text-white disabled:opacity-70 hover:bg-[#b8933f]"
             >
               {chargement ? "Redirection..." : "Payer avec Stripe"}
             </button>
@@ -253,7 +253,7 @@ export default function PaiementPage() {
               type="button"
               onClick={() => setShowWero(true)}
               disabled={panier.length === 0}
-              className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white disabled:opacity-60"
+              className="cursor-pointer rounded-xl bg-blue-600 px-6 py-3 font-bold text-white disabled:opacity-60 hover:bg-[#b8933f]"
             >
               Payer avec Wero
             </button>
@@ -322,7 +322,7 @@ export default function PaiementPage() {
               <button
                 onClick={onPaiementWeroEffectue}
                 disabled={weroLoading}
-                className="rounded-lg bg-green-600 px-5 py-3 font-bold text-white disabled:opacity-70"
+                className="cursor-pointer rounded-lg bg-green-600 px-5 py-3 font-bold text-white disabled:opacity-70 hover:bg-[#b8933f]"
               >
                 {weroLoading ? "Enregistrement..." : "Paiement effectué"}
               </button>
@@ -330,7 +330,7 @@ export default function PaiementPage() {
               <button
                 onClick={() => setShowWero(false)}
                 disabled={weroLoading}
-                className="rounded-lg bg-red-500 px-5 py-3 font-bold text-white disabled:opacity-70"
+                className="cursor-pointer rounded-lg bg-red-500 px-5 py-3 font-bold text-white disabled:opacity-70 hover:bg-[#b8933f]"
               >
                 Annuler
               </button>
@@ -378,7 +378,7 @@ export default function PaiementPage() {
 
             <button
               onClick={fermerConfirmation}
-              className="rounded-lg bg-blue-600 px-6 py-3 font-bold text-white"
+              className="cursor-pointer rounded-lg bg-blue-600 px-6 py-3 font-bold text-white hover:bg-[#b8933f]"
             >
               Fermer
             </button>
