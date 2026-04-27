@@ -177,7 +177,7 @@ export default function ProduitsClient({ produits }: Props) {
           }}
         >
           👉 Cliquez sur <strong>"Sélectionner"</strong> pour sélectionner vos produits.
-          Ensuite, cliquez sur <strong>"Voir panier 🧺"</strong> pour modifier les quantités. 
+          Ensuite, cliquez sur <strong>"Voir panier"</strong>🧺 pour modifier les quantités. 
         </div>
 
         {/* PRODUITS */}
