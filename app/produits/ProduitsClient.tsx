@@ -176,8 +176,8 @@ export default function ProduitsClient({ produits }: Props) {
             color: "#374151",
           }}
         >
-          👉 Cliquez sur <strong>"Ajouter"</strong> pour sélectionner vos produits.
-          Vous pourrez ensuite modifier les quantités dans votre panier 🧺
+          👉 Cliquez sur <strong>"Sélectionner"</strong> pour sélectionner vos produits.
+          Ensuite, cliquez sur <strong>"Voir panier 🧺"</strong> pour modifier les quantités. 
         </div>
 
         {/* PRODUITS */}
@@ -291,7 +291,7 @@ export default function ProduitsClient({ produits }: Props) {
                     transition: "all 0.2s",
                   }}
                 >
-                  🛒 Ajouter
+                  🛒 Sélectionner
                 </button>
               </div>
             </div>
