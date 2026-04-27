@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -94,7 +93,6 @@ export default function PaiementPage() {
 
       if (!response.ok) {
         setConfirmationMessage(data.error || "Erreur enregistrement commande");
-        setWeroLoading(false);
         return;
       }
 
@@ -119,8 +117,7 @@ export default function PaiementPage() {
   }
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden px-4 py-3 md:px-6 lg:px-8">
-      {/* IMAGE FOND */}
+    <main className="relative min-h-screen w-full overflow-hidden px-4 py-3 md:px-6 lg:px-8 text-[#111827]">
       <div className="absolute inset-0 z-0">
         <img
           src="/images/fondEcran.jpg"
@@ -129,13 +126,12 @@ export default function PaiementPage() {
         />
       </div>
 
-      {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-5xl">
-        <h1 className="text-center text-3xl font-bold text-[#7c2d12] mb-6">
+        <h1 className="mb-6 text-center text-3xl font-bold text-[#7c2d12]">
           Paiement
         </h1>
 
-        <h2 className="text-xl font-bold text-[#111827] mb-2">
+        <h2 className="mb-2 text-xl font-bold text-[#111827]">
           Total : {total.toFixed(2)} €
         </h2>
 
@@ -143,21 +139,20 @@ export default function PaiementPage() {
           <button
             onClick={allerVersStripe}
             disabled={chargement}
-            className="bg-green-600 text-white px-4 py-2 rounded"
+            className="rounded bg-green-600 px-4 py-2 text-white"
           >
             {chargement ? "Redirection..." : "Stripe"}
           </button>
 
           <button
             onClick={() => setShowWero(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className="rounded bg-blue-600 px-4 py-2 text-white"
           >
             Wero
           </button>
         </div>
       </div>
 
-      {/* POPUP WERO */}
       {showWero && (
         <div
           style={{
@@ -167,22 +162,27 @@ export default function PaiementPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 50,
+            zIndex: 99998,
+            padding: "20px",
           }}
         >
           <div
             style={{
-              background: "#ffffff",
-              opacity: 1,
+              width: "100%",
+              maxWidth: "460px",
+              backgroundColor: "#ffffff",
               color: "#111827",
+              WebkitTextFillColor: "#111827",
               padding: "24px",
               borderRadius: "16px",
               textAlign: "center",
             }}
           >
-            <h2 style={{ color: "#1d4ed8" }}>Paiement Wero</h2>
+            <h2 style={{ color: "#1d4ed8", WebkitTextFillColor: "#1d4ed8" }}>
+              Paiement Wero
+            </h2>
 
-            <p style={{ color: "#111827" }}>
+            <p style={{ color: "#111827", WebkitTextFillColor: "#111827" }}>
               Envoyez <strong>{total.toFixed(2)} €</strong>
             </p>
 
@@ -190,70 +190,93 @@ export default function PaiementPage() {
               onClick={onPaiementWeroEffectue}
               disabled={weroLoading}
               style={{
-                background: "#16a34a",
-                color: "white",
+                backgroundColor: "#16a34a",
+                color: "#ffffff",
+                WebkitTextFillColor: "#ffffff",
                 padding: "10px",
                 borderRadius: "8px",
+                border: "none",
+                fontWeight: "bold",
               }}
             >
-              {/* CONFIRMATION */}
-{confirmationMessage && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,
-      backgroundColor: "rgba(0,0,0,0.55)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 99999,
-      padding: "20px",
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#ffffff",
-        opacity: 1,
-        padding: "24px",
-        borderRadius: "16px",
-        textAlign: "center",
-        maxWidth: "430px",
-        width: "100%",
-      }}
-    >
-      <p
-        style={{
-          color: "#111827",
-          WebkitTextFillColor: "#111827",
-          fontSize: "17px",
-          fontWeight: "bold",
-          lineHeight: "1.5",
-          margin: "0 0 18px 0",
-          opacity: 1,
-        }}
-      >
-        {confirmationMessage}
-      </p>
+              {weroLoading ? "Enregistrement..." : "Paiement effectué"}
+            </button>
 
-      <button
-        onClick={fermerConfirmation}
-        style={{
-          marginTop: "10px",
-          backgroundColor: "#2563eb",
-          color: "#ffffff",
-          WebkitTextFillColor: "#ffffff",
-          padding: "11px 22px",
-          borderRadius: "10px",
-          border: "none",
-          fontWeight: "bold",
-          fontSize: "16px",
-        }}
-      >
-        Fermer
-      </button>
-    </div>
-  </div>
-)}
+            <button
+              onClick={() => setShowWero(false)}
+              disabled={weroLoading}
+              style={{
+                marginLeft: "10px",
+                backgroundColor: "#ef4444",
+                color: "#ffffff",
+                WebkitTextFillColor: "#ffffff",
+                padding: "10px",
+                borderRadius: "8px",
+                border: "none",
+                fontWeight: "bold",
+              }}
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
+
+      {confirmationMessage && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.55)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 99999,
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#ffffff",
+              opacity: 1,
+              padding: "24px",
+              borderRadius: "16px",
+              textAlign: "center",
+              maxWidth: "430px",
+              width: "100%",
+            }}
+          >
+            <p
+              style={{
+                color: "#111827",
+                WebkitTextFillColor: "#111827",
+                fontSize: "17px",
+                fontWeight: "bold",
+                lineHeight: "1.5",
+                margin: "0 0 18px 0",
+              }}
+            >
+              {confirmationMessage}
+            </p>
+
+            <button
+              onClick={fermerConfirmation}
+              style={{
+                backgroundColor: "#2563eb",
+                color: "#ffffff",
+                WebkitTextFillColor: "#ffffff",
+                padding: "11px 22px",
+                borderRadius: "10px",
+                border: "none",
+                fontWeight: "bold",
+                fontSize: "16px",
+              }}
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
-} 
+}
