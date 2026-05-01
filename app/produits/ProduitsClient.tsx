@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { CSSProperties } from "react";
 
 type Produit = {
   id: number;
@@ -29,6 +30,23 @@ type Toast = {
 
 export default function ProduitsClient({ produits }: Props) {
   const [toast, setToast] = useState<Toast | null>(null);
+  const [videoOuverte, setVideoOuverte] = useState<string | null>(null);
+
+  function getImageProduit(nom: string) {
+    const n = nom.toLowerCase();
+
+    if (n.includes("boeuf")) return "boeuf";
+    if (n.includes("fromage")) return "fromage";
+    return "poulet";
+  }
+
+  function getVideoProduit(nom: string) {
+    const n = nom.toLowerCase();
+
+    if (n.includes("boeuf")) return "/videos/cuisson-boeuf.mp4";
+    if (n.includes("fromage")) return "/videos/cuisson-fromage.mp4";
+    return "/videos/cuisson-poulet.mp4";
+  }
 
   function afficherToast(message: string, type: "success" | "error" = "success") {
     setToast({ message, type });
@@ -69,33 +87,13 @@ export default function ProduitsClient({ produits }: Props) {
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden px-3 py-2 md:px-6 lg:px-8">
-      {/* TOAST GLOBAL */}
       {toast && (
-        <div
-          style={{
-            position: "fixed",
-            top: "18px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 99999,
-            width: "calc(100% - 32px)",
-            maxWidth: "420px",
-            backgroundColor: toast.type === "success" ? "#dcfce7" : "#fee2e2",
-            color: toast.type === "success" ? "#166534" : "#991b1b",
-            padding: "13px 16px",
-            borderRadius: "14px",
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: "14px",
-            boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
-          }}
-        >
+        <div style={toastStyle(toast.type)}>
           {toast.type === "success" ? "✅ " : "⚠️ "}
           {toast.message}
         </div>
       )}
 
-      {/* IMAGE DE FOND */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/fondEcran.jpg"
@@ -104,9 +102,7 @@ export default function ProduitsClient({ produits }: Props) {
         />
       </div>
 
-      {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        {/* HEADER */}
         <section
           className="mt-3 rounded-[24px] px-4 py-5 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-3 md:py-3"
           style={{
@@ -115,7 +111,6 @@ export default function ProduitsClient({ produits }: Props) {
           }}
         >
           <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-            {/* LOGO MOBILE */}
             <div className="flex justify-center md:hidden">
               <img
                 src="/images/Logosamoussas.png"
@@ -124,7 +119,6 @@ export default function ProduitsClient({ produits }: Props) {
               />
             </div>
 
-            {/* LOGO GAUCHE DESKTOP */}
             <div className="hidden md:flex justify-center md:justify-start">
               <img
                 src="/images/Logosamoussas.png"
@@ -133,7 +127,6 @@ export default function ProduitsClient({ produits }: Props) {
               />
             </div>
 
-            {/* CONTENU CENTRE */}
             <div className="text-center">
               <h1
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -151,7 +144,6 @@ export default function ProduitsClient({ produits }: Props) {
               </p>
             </div>
 
-            {/* LOGO DROIT DESKTOP */}
             <div className="hidden md:flex justify-center md:justify-end">
               <img
                 src="/images/Logosamoussas.png"
@@ -162,42 +154,16 @@ export default function ProduitsClient({ produits }: Props) {
           </div>
         </section>
 
-        {/* INFO */}
-        <div
-          style={{
-            maxWidth: "860px",
-            margin: "10px auto 16px auto",
-            backgroundColor: "#ffffff",
-            padding: "12px 16px",
-            borderRadius: "12px",
-            textAlign: "center",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-            fontSize: "14px",
-            color: "#374151",
-          }}
-        >
+        <div style={infoStyle}>
           👉 Cliquez sur <strong>"Sélectionner"</strong> pour sélectionner un produit.
-          Ensuite, cliquez sur <strong>"Voir panier"</strong>🧺 pour modifier les quantités. 
+          Ensuite, cliquez sur <strong>"Voir panier"</strong> 🧺 pour modifier les quantités.
         </div>
 
-        {/* PRODUITS */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div style={gridStyle}>
           {produits.map((produit) => (
             <div
               key={produit.id}
-              style={{
-                borderRadius: "16px",
-                backgroundColor: "#ffffff",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                overflow: "hidden",
-                transition: "0.2s",
-              }}
+              style={cardStyle}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.03)";
                 e.currentTarget.style.boxShadow =
@@ -209,42 +175,27 @@ export default function ProduitsClient({ produits }: Props) {
                   "0 4px 12px rgba(0,0,0,0.08)";
               }}
             >
-              <img
-                src={`/images/${
-                  produit.nom.toLowerCase().includes("boeuf")
-                    ? "boeuf"
-                    : produit.nom.toLowerCase().includes("fromage")
-                    ? "fromage"
-                    : "poulet"
-                }.jpg`}
-                alt={produit.nom}
-                style={{
-                  width: "100%",
-                  height: "190px",
-                  objectFit: "cover",
-                }}
-              />
+              <div style={imageWrapperStyle}>
+                <img
+                  src={`/images/${getImageProduit(produit.nom)}.jpg`}
+                  alt={produit.nom}
+                  style={imageStyle}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setVideoOuverte(getVideoProduit(produit.nom))}
+                  style={playButtonStyle}
+                  title="Voir la cuisson"
+                >
+                  ▶
+                </button>
+              </div>
 
               <div style={{ padding: "16px" }}>
+                <h2 style={titleStyle}>{produit.nom}</h2>
 
-               <h2
-                style={{
-                 margin: "0 0 8px 0",
-                  fontSize: "20px",
-                 color: "#111827",
-                fontWeight: "bold",
-                 }}
-                >
-              {produit.nom}
-            </h2>
-
-                <p
-                  style={{
-                    margin: "0 0 12px 0",
-                    fontSize: "14px",
-                    color: "#555",
-                  }}
-                >
+                <p style={descriptionStyle}>
                   {produit.nom.toLowerCase().includes("boeuf") &&
                     "Samoussas au bœuf croustillants."}
                   {produit.nom.toLowerCase().includes("fromage") &&
@@ -253,14 +204,12 @@ export default function ProduitsClient({ produits }: Props) {
                     "Poulet tendre et épicé."}
                 </p>
 
-               <p style={{ margin: "0 0 8px 0", fontSize: "15px", color: "#111827" }}>
-                   Prix : {produit.prix.toFixed(2)} €
+                <p style={priceStyle}>Prix : {produit.prix.toFixed(2)} €</p>
+
+                <p style={stockStyle}>
+                  {produit.stock === 0 ? "Rupture de stock" : "En stock"}
                 </p>
 
-               <p style={{ margin: "0 0 14px 0", fontSize: "15px", color: "#111827" }}>
-                 {produit.stock === 0 ? "Rupture de stock" : "En stock"}
-                  </p>
-                  
                 <button
                   onClick={() =>
                     ajouterAuPanier(
@@ -272,23 +221,16 @@ export default function ProduitsClient({ produits }: Props) {
                   }
                   disabled={produit.stock === 0}
                   style={{
-                    padding: "12px",
-                    width: "100%",
+                    ...selectButtonStyle,
                     background:
                       produit.stock === 0
                         ? "#9ca3af"
                         : "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "10px",
                     cursor: produit.stock === 0 ? "not-allowed" : "pointer",
-                    fontWeight: "bold",
-                    fontSize: "15px",
                     boxShadow:
                       produit.stock === 0
                         ? "none"
                         : "0 4px 10px rgba(37,99,235,0.4)",
-                    transition: "all 0.2s",
                   }}
                 >
                   🛒 Sélectionner
@@ -298,26 +240,193 @@ export default function ProduitsClient({ produits }: Props) {
           ))}
         </div>
 
-        {/* BOUTON PANIER */}
         <div style={{ marginTop: "18px", textAlign: "center" }}>
           <Link href="/panier">
-            <button
-              style={{
-                padding: "12px 24px",
-                fontSize: "17px",
-                background: "linear-gradient(135deg, #16a34a, #15803d)",
-                color: "white",
-                border: "none",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Voir panier
-            </button>
+            <button style={panierButtonStyle}>Voir panier</button>
           </Link>
         </div>
       </div>
+
+      {videoOuverte && (
+        <div onClick={() => setVideoOuverte(null)} style={overlayStyle}>
+          <div onClick={(e) => e.stopPropagation()} style={popupStyle}>
+            <button onClick={() => setVideoOuverte(null)} style={closeBtnStyle}>
+              ✕
+            </button>
+
+            <video
+              src={videoOuverte}
+              controls
+              autoPlay
+              style={videoStyle}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
+
+function toastStyle(type: "success" | "error"): CSSProperties {
+  return {
+    position: "fixed",
+    top: "18px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    zIndex: 99999,
+    width: "calc(100% - 32px)",
+    maxWidth: "420px",
+    backgroundColor: type === "success" ? "#dcfce7" : "#fee2e2",
+    color: type === "success" ? "#166534" : "#991b1b",
+    padding: "13px 16px",
+    borderRadius: "14px",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "14px",
+    boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+  };
+}
+
+const infoStyle: CSSProperties = {
+  maxWidth: "860px",
+  margin: "10px auto 16px auto",
+  backgroundColor: "#ffffff",
+  padding: "12px 16px",
+  borderRadius: "12px",
+  textAlign: "center",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+  fontSize: "14px",
+  color: "#374151",
+};
+
+const gridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+  gap: "20px",
+};
+
+const cardStyle: CSSProperties = {
+  borderRadius: "16px",
+  backgroundColor: "#ffffff",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+  overflow: "hidden",
+  transition: "0.2s",
+};
+
+const imageWrapperStyle: CSSProperties = {
+  position: "relative",
+};
+
+const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "190px",
+  objectFit: "cover",
+  display: "block",
+};
+
+const playButtonStyle: CSSProperties = {
+  position: "absolute",
+  right: "14px",
+  bottom: "14px",
+  width: "46px",
+  height: "46px",
+  borderRadius: "999px",
+  border: "2px solid rgba(255,255,255,0.85)",
+  background: "linear-gradient(135deg, #7c2d12, #b45309)",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "18px",
+  fontWeight: "bold",
+  boxShadow: "0 8px 18px rgba(0,0,0,0.35)",
+};
+
+const titleStyle: CSSProperties = {
+  margin: "0 0 8px 0",
+  fontSize: "20px",
+  color: "#111827",
+  fontWeight: "bold",
+};
+
+const descriptionStyle: CSSProperties = {
+  margin: "0 0 12px 0",
+  fontSize: "14px",
+  color: "#555",
+};
+
+const priceStyle: CSSProperties = {
+  margin: "0 0 8px 0",
+  fontSize: "15px",
+  color: "#111827",
+};
+
+const stockStyle: CSSProperties = {
+  margin: "0 0 14px 0",
+  fontSize: "15px",
+  color: "#111827",
+};
+
+const selectButtonStyle: CSSProperties = {
+  padding: "12px",
+  width: "100%",
+  color: "white",
+  border: "none",
+  borderRadius: "10px",
+  fontWeight: "bold",
+  fontSize: "15px",
+  transition: "all 0.2s",
+};
+
+const panierButtonStyle: CSSProperties = {
+  padding: "12px 24px",
+  fontSize: "17px",
+  background: "linear-gradient(135deg, #16a34a, #15803d)",
+  color: "white",
+  border: "none",
+  borderRadius: "12px",
+  cursor: "pointer",
+  fontWeight: "bold",
+};
+
+const overlayStyle: CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  backgroundColor: "rgba(0,0,0,0.75)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 9999,
+  padding: "20px",
+};
+
+const popupStyle: CSSProperties = {
+  position: "relative",
+  width: "100%",
+  maxWidth: "720px",
+  background: "linear-gradient(135deg, #fff7ed, #ffffff)",
+  borderRadius: "22px",
+  padding: "16px",
+  boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
+  border: "1px solid #facc15",
+};
+
+const closeBtnStyle: CSSProperties = {
+  position: "absolute",
+  top: "-14px",
+  right: "-14px",
+  width: "36px",
+  height: "36px",
+  borderRadius: "999px",
+  border: "none",
+  backgroundColor: "#7c2d12",
+  color: "white",
+  cursor: "pointer",
+  fontWeight: "bold",
+  fontSize: "18px",
+  zIndex: 2,
+};
+
+const videoStyle: CSSProperties = {
+  width: "100%",
+  borderRadius: "16px",
+  display: "block",
+};
