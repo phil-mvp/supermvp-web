@@ -374,10 +374,22 @@ export default function PanierPage() {
       🔒 Paiement simple et sécurisé par <strong>Stripe</strong> ou <strong>Wero</strong>.
     </p>
 
-    <p style={{ margin: 0 }}>
-      📩 Pour toute autre demande, n’hésitez pas à nous adresser un courriel.
-      Consultez notre carte de visite.
-    </p>
+   <p style={{ margin: 0 }}>
+  📩 Pour toute autre demande, n’hésitez pas à nous adresser un courriel.{" "}
+  <a
+    href="/images/carte-visite.jpg"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      color: "#b45309",
+      fontWeight: "bold",
+      textDecoration: "underline",
+      cursor: "pointer",
+    }}
+  >
+    Consultez notre carte de visite
+  </a>
+</p>
   </div>
 </div>
 
