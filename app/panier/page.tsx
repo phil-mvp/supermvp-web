@@ -258,7 +258,7 @@ const linkStyle = {
 };
 
 const totalBlock = {
-  textAlign: "center",
+  textAlign: "center" as const,
   fontSize: "22px",
   fontWeight: "bold",
 };
