@@ -5,7 +5,7 @@ const produits = [
     nom: "Samoussas Bœuf (sauce soja oignon-vert)",
     image: "/images/boeuf.jpg",
     modedecuisson:
-      "👉Cuisson dans un bain d'huile impérativement. 🔥Thermostat <170°c>. Bien dorée pas plus, durée environ 5 mn.",
+      "👉Cuisson dans un bain d'huile impérativement. 🔥Thermostat <170°c>. La cuisson doit être bien dorée, pas plus, et durer environ 5 minutes.",
     description:
       "Un samoussa croustillant garni d’un bœuf savoureux et délicatement assaisonné.",
     composition:
@@ -17,7 +17,7 @@ const produits = [
     nom: "Samoussas Fromage (comté, meule-fruitée, tomme des Alpes)",
     image: "/images/fromage.jpg",
     modedecuisson:
-      "👉Cuisson dans un bain d'huile impérativement. Le fromage est très sensible à la chaleur, ne pas dépasser 🔥Thermostat <160°c>. Légérement dorée suffit, durée environ 4 mn.",
+      "👉Cuisson dans un bain d'huile impérativement. Le fromage est très sensible à la chaleur, ne pas dépasser 🔥Thermostat <160°c>. La cuisson doit être légèrement dorée et durer environ 4 minutes.",
     description:
       "Une version fondante et généreuse, idéale pour les amateurs de fromage.",
     composition:
@@ -29,7 +29,7 @@ const produits = [
     nom: "Samoussas Poulet (curry coriandre)",
     image: "/images/poulet.jpg",
     modedecuisson:
-      "👉Cuisson dans un bain d'huile impérativement. 🔥Thermostat <170°c>. Bien dorée pas plus, durée environ 5 mn.",
+      "👉Cuisson dans un bain d'huile impérativement. 🔥Thermostat <170°c>. La cuisson doit être bien dorée, pas plus, et durer environ 5 minutes.",
     description:
       "Un samoussa au poulet tendre, parfumé et légèrement épicé.",
     composition:
