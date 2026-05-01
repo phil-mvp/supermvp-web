@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 
 type ProduitPanier = {
   id: number;
@@ -35,8 +36,15 @@ export default function PanierPage() {
   }
 
   function stopAutoQuantite() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   }
 
   function augmenterQuantite(id: number) {
@@ -48,8 +56,10 @@ export default function PanierPage() {
             alert("Stock maximum atteint");
             return p;
           }
+
           return { ...p, quantite: p.quantite + 1 };
         }
+
         return p;
       });
 
@@ -72,25 +82,32 @@ export default function PanierPage() {
   function startAutoQuantite(id: number, action: "plus" | "moins") {
     stopAutoQuantite();
 
-    action === "plus"
-      ? augmenterQuantite(id)
-      : diminuerQuantite(id);
+    if (action === "plus") {
+      augmenterQuantite(id);
+    } else {
+      diminuerQuantite(id);
+    }
 
     timeoutRef.current = setTimeout(() => {
       intervalRef.current = setInterval(() => {
-        action === "plus"
-          ? augmenterQuantite(id)
-          : diminuerQuantite(id);
+        if (action === "plus") {
+          augmenterQuantite(id);
+        } else {
+          diminuerQuantite(id);
+        }
       }, 120);
     }, 350);
   }
 
   function supprimerProduit(id: number) {
-    sauvegarderPanier(panier.filter((p) => p.id !== id));
+    const nouveauPanier = panier.filter((p) => p.id !== id);
+    sauvegarderPanier(nouveauPanier);
   }
 
   function viderPanier() {
-    if (!window.confirm("Voulez-vous vraiment vider le panier ?")) return;
+    const ok = window.confirm("Voulez-vous vraiment vider le panier ?");
+    if (!ok) return;
+
     localStorage.removeItem("panier");
     setPanier([]);
   }
@@ -106,98 +123,367 @@ export default function PanierPage() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-5xl">
+        <section
+          className="mt-3 mb-6 rounded-[24px] px-5 py-6 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-4 md:py-4"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(248,238,214,0.96), rgba(238,220,150,0.92))",
+          }}
+        >
+          <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
+            <div className="flex justify-center md:hidden">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo"
+                className="w-[110px] object-contain rounded-lg"
+              />
+            </div>
 
-        {/* LISTE PRODUITS */}
-        {panier.length > 0 && (
-          <div style={{ display: "grid", gap: "14px", marginBottom: "18px" }}>
-            {panier.map((produit) => (
-              <div key={produit.id} style={cardStyle}>
-                <img
-                  src={`/images/${
-                    produit.nom.toLowerCase().includes("boeuf")
-                      ? "boeuf22"
-                      : produit.nom.toLowerCase().includes("fromage")
-                      ? "fromage22"
-                      : "poulet22"
-                  }.jpg`}
-                  alt={produit.nom}
-                  style={imgStyle}
-                />
+            <div className="hidden md:flex justify-center md:justify-start">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo gauche"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
 
-                <div style={{ flex: 1 }}>
-                  <h2 style={titleStyle}>{produit.nom}</h2>
-                  <p style={textStyle}>
-                    {produit.prix.toFixed(2)} € x {produit.quantite}
-                  </p>
-                  <p style={totalStyle}>
-                    {(produit.prix * produit.quantite).toFixed(2)} €
-                  </p>
-                </div>
+            <div className="text-center">
+              <h1
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                className="text-3xl font-bold text-[#7c2d12] md:text-4xl"
+              >
+                Mon Panier
+              </h1>
 
-                <div style={actionsStyle}>
-                  <button
-                    title="Maintenir pour accélérer"
-                    onMouseDown={() => startAutoQuantite(produit.id, "moins")}
-                    onMouseUp={stopAutoQuantite}
-                    onMouseLeave={stopAutoQuantite}
-                    style={btnQty}
-                  >
-                    −
-                  </button>
+              <p className="mt-2 text-base italic text-[#92400e] md:text-lg">
+                Vérifiez vos produits avant de passer commande
+              </p>
+            </div>
 
-                  <span>{produit.quantite}</span>
-
-                  <button
-                    title="Maintenir pour accélérer"
-                    onMouseDown={() => startAutoQuantite(produit.id, "plus")}
-                    onMouseUp={stopAutoQuantite}
-                    onMouseLeave={stopAutoQuantite}
-                    style={btnQtyBlue}
-                  >
-                    +
-                  </button>
-
-                  <button onClick={() => supprimerProduit(produit.id)}>🗑</button>
-                </div>
-              </div>
-            ))}
+            <div className="hidden md:flex justify-center md:justify-end">
+              <img
+                src="/images/Logosamoussas.png"
+                alt="Logo droit"
+                className="w-[110px] lg:w-[120px] object-contain rounded-lg"
+              />
+            </div>
           </div>
+        </section>
+
+        {panier.length === 0 ? (
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "24px",
+              borderRadius: "18px",
+              textAlign: "center",
+              boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+            }}
+          >
+            <p style={{ fontSize: "20px", marginBottom: "20px" }}>
+              Votre panier est vide.
+            </p>
+
+            <Link href="/produits">
+              <button
+                style={{
+                  padding: "12px 24px",
+                  fontSize: "18px",
+                  background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Retour aux produits
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "grid", gap: "14px", marginBottom: "18px" }}>
+              {panier.map((produit) => (
+                <div
+                  key={produit.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "16px",
+                    borderRadius: "16px",
+                    padding: "16px 18px",
+                    backgroundColor: "#ffffff",
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                  }}
+                >
+                  <img
+                    src={`/images/${
+                      produit.nom.toLowerCase().includes("boeuf")
+                        ? "boeuf22"
+                        : produit.nom.toLowerCase().includes("fromage")
+                        ? "fromage22"
+                        : "poulet22"
+                    }.jpg`}
+                    alt={produit.nom}
+                    style={{
+                      width: "98px",
+                      height: "78px",
+                      objectFit: "cover",
+                      borderRadius: "12px",
+                      flexShrink: 0,
+                    }}
+                  />
+
+                  <div style={{ flex: 1 }}>
+                    <h2
+                      style={{
+                        margin: "0 0 6px 0",
+                        fontSize: "17px",
+                        color: "#111827",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {produit.nom}
+                    </h2>
+
+                    <p
+                      style={{
+                        margin: "0 0 4px 0",
+                        color: "#374151",
+                        fontSize: "15px",
+                      }}
+                    >
+                      {produit.prix.toFixed(2)} € x {produit.quantite}
+                    </p>
+
+                    <p
+                      style={{
+                        margin: 0,
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                        color: "#111827",
+                      }}
+                    >
+                      {(produit.prix * produit.quantite).toFixed(2)} €
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <button
+                      title="Maintenez appuyé pour diminuer rapidement"
+                      onMouseDown={() => startAutoQuantite(produit.id, "moins")}
+                      onMouseUp={stopAutoQuantite}
+                      onMouseLeave={stopAutoQuantite}
+                      onTouchStart={() =>
+                        startAutoQuantite(produit.id, "moins")
+                      }
+                      onTouchEnd={stopAutoQuantite}
+                      style={btnQty}
+                    >
+                      −
+                    </button>
+
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                        minWidth: "16px",
+                        textAlign: "center",
+                      }}
+                    >
+                      {produit.quantite}
+                    </span>
+
+                    <button
+                      title="Maintenez appuyé pour augmenter rapidement"
+                      onMouseDown={() => startAutoQuantite(produit.id, "plus")}
+                      onMouseUp={stopAutoQuantite}
+                      onMouseLeave={stopAutoQuantite}
+                      onTouchStart={() => startAutoQuantite(produit.id, "plus")}
+                      onTouchEnd={stopAutoQuantite}
+                      style={btnQtyBlue}
+                    >
+                      +
+                    </button>
+
+                    <button
+                      onClick={() => supprimerProduit(produit.id)}
+                      style={{
+                        backgroundColor: "#fee2e2",
+                        color: "#b91c1c",
+                        border: "none",
+                        padding: "8px 11px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      🗑
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                background: "linear-gradient(135deg, #fffaf0, #fff7ed)",
+                borderRadius: "18px",
+                padding: "18px",
+                marginBottom: "18px",
+                border: "1px solid #facc15",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+              }}
+            >
+              <h3
+                style={{
+                  margin: "0 0 12px 0",
+                  color: "#7c2d12",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Informations pour nos clients
+              </h3>
+
+              <div
+                style={{
+                  display: "grid",
+                  gap: "10px",
+                  color: "#374151",
+                  fontSize: "15px",
+                  lineHeight: "1.5",
+                }}
+              >
+                <p style={{ margin: 0 }}>
+                  🚚 <strong>Livraison offerte</strong> dans un rayon de 20 km
+                  autour de Nevers.
+                </p>
+
+                <p style={{ margin: 0 }}>
+                  ❄️ Les samoussas sont fournis{" "}
+                  <strong>sous forme congelée</strong>.
+                </p>
+
+                <p style={{ margin: 0 }}>
+                  🔒 Paiement simple et sécurisé par <strong>Stripe</strong> ou{" "}
+                  <strong>Wero</strong>.
+                </p>
+
+                <p style={{ margin: 0 }}>
+                  📩 Pour toute autre demande, n’hésitez pas à nous adresser un
+                  courriel.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setCarteOuverte(true)}
+                    style={{
+                      color: "#b45309",
+                      fontWeight: "bold",
+                      textDecoration: "underline",
+                      background: "none",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Consultez notre carte de visite
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "linear-gradient(135deg, #fff7ed, #ffffff)",
+                borderRadius: "20px",
+                padding: "22px",
+                boxShadow: "0 10px 24px rgba(0,0,0,0.10)",
+                textAlign: "center",
+                border: "1px solid #fde68a",
+              }}
+            >
+              <h2
+                style={{
+                  marginBottom: "18px",
+                  color: "#111827",
+                  fontSize: "26px",
+                }}
+              >
+                Total : {total.toFixed(2)} €
+              </h2>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Link href="/commande">
+                  <button
+                    style={{
+                      padding: "12px 24px",
+                      fontSize: "17px",
+                      background: "linear-gradient(135deg, #16a34a, #15803d)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "12px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      boxShadow: "0 6px 14px rgba(22,163,74,0.4)",
+                    }}
+                  >
+                    Commander
+                  </button>
+                </Link>
+
+                <button
+                  onClick={viderPanier}
+                  style={{
+                    padding: "12px 24px",
+                    fontSize: "17px",
+                    backgroundColor: "#ef4444",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "12px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Vider le panier
+                </button>
+              </div>
+            </div>
+          </>
         )}
-
-        {/* INFOS + LIEN */}
-        <div style={infoBlock}>
-          <p>
-            📩 Une demande ?{" "}
-            <button onClick={() => setCarteOuverte(true)} style={linkStyle}>
-              Consultez notre carte de visite
-            </button>
-          </p>
-        </div>
-
-        {/* TOTAL */}
-        <div style={totalBlock}>
-          <h2>Total : {total.toFixed(2)} €</h2>
-        </div>
       </div>
 
-      {/* POPUP PREMIUM */}
       {carteOuverte && (
-        <div
-          onClick={() => setCarteOuverte(false)}
-          style={overlayStyle}
-        >
+        <div onClick={() => setCarteOuverte(false)} style={overlayStyle}>
           <div onClick={(e) => e.stopPropagation()} style={popupStyle}>
-            <button
-              onClick={() => setCarteOuverte(false)}
-              style={closeBtn}
-            >
+            <button onClick={() => setCarteOuverte(false)} style={closeBtn}>
               ✕
             </button>
 
             <img
               src="/images/carte-visite.jpg"
               alt="Carte de visite"
-              style={{ width: "100%", borderRadius: "12px" }}
+              style={{
+                width: "100%",
+                borderRadius: "14px",
+                display: "block",
+              }}
             />
           </div>
         </div>
@@ -206,91 +492,55 @@ export default function PanierPage() {
   );
 }
 
-/* STYLES */
-const cardStyle = {
-  display: "flex",
-  gap: "16px",
-  padding: "16px",
-  background: "#fff",
-  borderRadius: "16px",
-};
-
-const imgStyle = {
-  width: "100px",
-  borderRadius: "12px",
-};
-
-const titleStyle = { fontWeight: "bold" };
-const textStyle = {};
-const totalStyle = { fontWeight: "bold" };
-
-const actionsStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-};
-
-const btnQty = {
+const btnQty: CSSProperties = {
   width: "34px",
   height: "34px",
   borderRadius: "8px",
+  border: "none",
+  backgroundColor: "#e5e7eb",
+  cursor: "pointer",
+  fontSize: "18px",
+  fontWeight: "bold",
 };
 
-const btnQtyBlue = {
+const btnQtyBlue: CSSProperties = {
   ...btnQty,
   backgroundColor: "#dbeafe",
 };
 
-const infoBlock = {
-  background: "#fff7ed",
-  padding: "16px",
-  borderRadius: "12px",
-  marginBottom: "12px",
-};
-
-const linkStyle = {
-  color: "#b45309",
-  fontWeight: "bold",
-  textDecoration: "underline",
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-};
-
-const totalBlock = {
-  textAlign: "center" as const,
-  fontSize: "22px",
-  fontWeight: "bold",
-};
-
-const overlayStyle = {
-  position: "fixed" as const,
+const overlayStyle: CSSProperties = {
+  position: "fixed",
   inset: 0,
-  background: "rgba(0,0,0,0.6)",
+  backgroundColor: "rgba(0,0,0,0.70)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  zIndex: 1000,
+  zIndex: 9999,
+  padding: "20px",
 };
 
-const popupStyle = {
-  background: "white",
-  padding: "16px",
-  borderRadius: "16px",
-  maxWidth: "500px",
-  width: "90%",
-  position: "relative" as const,
+const popupStyle: CSSProperties = {
+  position: "relative",
+  width: "100%",
+  maxWidth: "620px",
+  background: "linear-gradient(135deg, #fff7ed, #ffffff)",
+  borderRadius: "20px",
+  padding: "18px",
+  boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
+  border: "1px solid #facc15",
 };
 
-const closeBtn = {
-  position: "absolute" as const,
-  top: "10px",
-  right: "10px",
+const closeBtn: CSSProperties = {
+  position: "absolute",
+  top: "-14px",
+  right: "-14px",
+  width: "34px",
+  height: "34px",
+  borderRadius: "999px",
   border: "none",
-  background: "#ef4444",
+  backgroundColor: "#7c2d12",
   color: "white",
-  borderRadius: "50%",
-  width: "30px",
-  height: "30px",
   cursor: "pointer",
+  fontWeight: "bold",
+  fontSize: "18px",
 };
