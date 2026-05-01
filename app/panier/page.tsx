@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ProduitPanier = {
   id: number;
@@ -14,6 +14,9 @@ type ProduitPanier = {
 export default function PanierPage() {
   const [panier, setPanier] = useState<ProduitPanier[]>([]);
 
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     const panierStocke = localStorage.getItem("panier");
     const panierParse = panierStocke ? JSON.parse(panierStocke) : [];
@@ -25,36 +28,78 @@ export default function PanierPage() {
     0
   );
 
-  function augmenterQuantite(id: number) {
-    const nouveauPanier = panier.map((p) => {
-      if (p.id === id) {
-        if (p.quantite >= p.stock) {
-          alert("Stock maximum atteint");
-          return p;
-        }
-        return { ...p, quantite: p.quantite + 1 };
-      }
-      return p;
-    });
-
+  function sauvegarderPanier(nouveauPanier: ProduitPanier[]) {
     setPanier(nouveauPanier);
     localStorage.setItem("panier", JSON.stringify(nouveauPanier));
   }
 
-  function diminuerQuantite(id: number) {
-    const nouveauPanier = panier
-      .map((p) => (p.id === id ? { ...p, quantite: p.quantite - 1 } : p))
-      .filter((p) => p.quantite > 0);
+  function stopAutoQuantite() {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
 
-    setPanier(nouveauPanier);
-    localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }
+
+  function augmenterQuantite(id: number) {
+    setPanier((ancienPanier) => {
+      const nouveauPanier = ancienPanier.map((p) => {
+        if (p.id === id) {
+          if (p.quantite >= p.stock) {
+            stopAutoQuantite();
+            alert("Stock maximum atteint");
+            return p;
+          }
+
+          return { ...p, quantite: p.quantite + 1 };
+        }
+
+        return p;
+      });
+
+      localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+      return nouveauPanier;
+    });
+  }
+
+  function diminuerQuantite(id: number) {
+    setPanier((ancienPanier) => {
+      const nouveauPanier = ancienPanier
+        .map((p) => (p.id === id ? { ...p, quantite: p.quantite - 1 } : p))
+        .filter((p) => p.quantite > 0);
+
+      localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+      return nouveauPanier;
+    });
+  }
+
+  function startAutoQuantite(id: number, action: "plus" | "moins") {
+    stopAutoQuantite();
+
+    if (action === "plus") {
+      augmenterQuantite(id);
+    } else {
+      diminuerQuantite(id);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        if (action === "plus") {
+          augmenterQuantite(id);
+        } else {
+          diminuerQuantite(id);
+        }
+      }, 120);
+    }, 350);
   }
 
   function supprimerProduit(id: number) {
     const nouveauPanier = panier.filter((p) => p.id !== id);
-
-    setPanier(nouveauPanier);
-    localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+    sauvegarderPanier(nouveauPanier);
   }
 
   function viderPanier() {
@@ -67,7 +112,6 @@ export default function PanierPage() {
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden px-3 py-4 md:px-6 lg:px-8">
-      {/* IMAGE DE FOND */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/fondEcran.jpg"
@@ -76,7 +120,6 @@ export default function PanierPage() {
         />
       </div>
 
-      {/* CONTENU */}
       <div className="relative z-10 mx-auto w-full max-w-5xl">
         <section
           className="mt-3 mb-6 rounded-[24px] px-5 py-6 shadow-[0_14px_35px_rgba(0,0,0,0.16)] md:px-4 md:py-4"
@@ -86,7 +129,6 @@ export default function PanierPage() {
           }}
         >
           <div className="grid items-center gap-4 md:grid-cols-[190px_1fr_190px]">
-            {/* LOGO MOBILE */}
             <div className="flex justify-center md:hidden">
               <img
                 src="/images/Logosamoussas.png"
@@ -95,7 +137,6 @@ export default function PanierPage() {
               />
             </div>
 
-            {/* LOGO GAUCHE DESKTOP */}
             <div className="hidden md:flex justify-center md:justify-start">
               <img
                 src="/images/Logosamoussas.png"
@@ -104,7 +145,6 @@ export default function PanierPage() {
               />
             </div>
 
-            {/* CONTENU CENTRE */}
             <div className="text-center">
               <h1
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -118,7 +158,6 @@ export default function PanierPage() {
               </p>
             </div>
 
-            {/* LOGO DROIT DESKTOP */}
             <div className="hidden md:flex justify-center md:justify-end">
               <img
                 src="/images/Logosamoussas.png"
@@ -196,30 +235,35 @@ export default function PanierPage() {
                   />
 
                   <div style={{ flex: 1 }}>
-
                     <h2
-                     style={{
-                      margin: "0 0 6px 0",
-                       fontSize: "17px",
-                       color: "#111827",
-                      fontWeight: "bold",
-                     }}
-                      >
-                       {produit.nom}
+                      style={{
+                        margin: "0 0 6px 0",
+                        fontSize: "17px",
+                        color: "#111827",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {produit.nom}
                     </h2>
 
-                    <p style={{ margin: "0 0 4px 0", color: "#374151", fontSize: "15px" }}>
+                    <p
+                      style={{
+                        margin: "0 0 4px 0",
+                        color: "#374151",
+                        fontSize: "15px",
+                      }}
+                    >
                       {produit.prix.toFixed(2)} € x {produit.quantite}
                     </p>
 
                     <p
-                     style={{
-                      margin: 0,
-                      fontWeight: "bold",
-                      fontSize: "15px",
-                       color: "#111827",
-                        }}
-                        >
+                      style={{
+                        margin: 0,
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                        color: "#111827",
+                      }}
+                    >
                       {(produit.prix * produit.quantite).toFixed(2)} €
                     </p>
                   </div>
@@ -232,15 +276,36 @@ export default function PanierPage() {
                       flexShrink: 0,
                     }}
                   >
-                    <button onClick={() => diminuerQuantite(produit.id)} style={btnQty}>
+                    <button
+                      onMouseDown={() => startAutoQuantite(produit.id, "moins")}
+                      onMouseUp={stopAutoQuantite}
+                      onMouseLeave={stopAutoQuantite}
+                      onTouchStart={() => startAutoQuantite(produit.id, "moins")}
+                      onTouchEnd={stopAutoQuantite}
+                      style={btnQty}
+                    >
                       −
                     </button>
 
-                    <span style={{ fontWeight: "bold", fontSize: "16px", minWidth: "16px", textAlign: "center" }}>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                        minWidth: "16px",
+                        textAlign: "center",
+                      }}
+                    >
                       {produit.quantite}
                     </span>
 
-                    <button onClick={() => augmenterQuantite(produit.id)} style={btnQtyBlue}>
+                    <button
+                      onMouseDown={() => startAutoQuantite(produit.id, "plus")}
+                      onMouseUp={stopAutoQuantite}
+                      onMouseLeave={stopAutoQuantite}
+                      onTouchStart={() => startAutoQuantite(produit.id, "plus")}
+                      onTouchEnd={stopAutoQuantite}
+                      style={btnQtyBlue}
+                    >
                       +
                     </button>
 
@@ -272,11 +337,24 @@ export default function PanierPage() {
                 border: "1px solid #fde68a",
               }}
             >
-              <h2 style={{ marginBottom: "18px", color: "#111827", fontSize: "26px" }}>
+              <h2
+                style={{
+                  marginBottom: "18px",
+                  color: "#111827",
+                  fontSize: "26px",
+                }}
+              >
                 Total : {total.toFixed(2)} €
               </h2>
 
-              <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
                 <Link href="/commande">
                   <button
                     style={{

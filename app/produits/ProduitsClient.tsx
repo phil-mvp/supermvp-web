@@ -176,7 +176,7 @@ export default function ProduitsClient({ produits }: Props) {
             color: "#374151",
           }}
         >
-          👉 Cliquez sur <strong>"Sélectionner"</strong> pour sélectionner vos produits.
+          👉 Cliquez sur <strong>"Sélectionner"</strong> pour sélectionner un produit.
           Ensuite, cliquez sur <strong>"Voir panier"</strong>🧺 pour modifier les quantités. 
         </div>
 
