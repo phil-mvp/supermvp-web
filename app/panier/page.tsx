@@ -329,6 +329,60 @@ export default function PanierPage() {
               ))}
             </div>
 
+
+
+              <div
+  style={{
+    background: "linear-gradient(135deg, #fffaf0, #fff7ed)",
+    borderRadius: "18px",
+    padding: "18px",
+    marginBottom: "18px",
+    border: "1px solid #facc15",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+  }}
+>
+  <h3
+    style={{
+      margin: "0 0 12px 0",
+      color: "#7c2d12",
+      fontSize: "20px",
+      fontWeight: "bold",
+      textAlign: "center",
+    }}
+  >
+    Informations pour nos clients
+  </h3>
+
+  <div
+    style={{
+      display: "grid",
+      gap: "10px",
+      color: "#374151",
+      fontSize: "15px",
+      lineHeight: "1.5",
+    }}
+  >
+    <p style={{ margin: 0 }}>
+      🚚 <strong>Livraison offerte</strong> dans un rayon de 20 km autour de Nevers.
+    </p>
+
+    <p style={{ margin: 0 }}>
+      ❄️ Les samoussas sont fournis <strong>sous forme congelée</strong>.
+    </p>
+
+    <p style={{ margin: 0 }}>
+      🔒 Paiement simple et sécurisé par <strong>Stripe</strong> ou <strong>Wero</strong>.
+    </p>
+
+    <p style={{ margin: 0 }}>
+      📩 Pour toute autre demande, n’hésitez pas à nous adresser un courriel.
+      Consultez notre carte de visite.
+    </p>
+  </div>
+</div>
+
+
+
             <div
               style={{
                 background: "linear-gradient(135deg, #fff7ed, #ffffff)",
