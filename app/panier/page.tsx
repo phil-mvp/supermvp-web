@@ -277,6 +277,7 @@ export default function PanierPage() {
                     }}
                   >
                     <button
+                    title="Maintenez appuyé pour diminuer rapidement"
                       onMouseDown={() => startAutoQuantite(produit.id, "moins")}
                       onMouseUp={stopAutoQuantite}
                       onMouseLeave={stopAutoQuantite}
@@ -299,15 +300,16 @@ export default function PanierPage() {
                     </span>
 
                     <button
-                      onMouseDown={() => startAutoQuantite(produit.id, "plus")}
+                     title="Maintenez appuyé pour augmenter rapidement"
+                     onMouseDown={() => startAutoQuantite(produit.id, "plus")}
                       onMouseUp={stopAutoQuantite}
-                      onMouseLeave={stopAutoQuantite}
-                      onTouchStart={() => startAutoQuantite(produit.id, "plus")}
-                      onTouchEnd={stopAutoQuantite}
-                      style={btnQtyBlue}
+                     onMouseLeave={stopAutoQuantite}
+                     onTouchStart={() => startAutoQuantite(produit.id, "plus")}
+                       onTouchEnd={stopAutoQuantite}
+                     style={btnQtyBlue}
                     >
-                      +
-                    </button>
+                     +
+                  </button>
 
                     <button
                       onClick={() => supprimerProduit(produit.id)}
